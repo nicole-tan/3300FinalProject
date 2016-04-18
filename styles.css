@@ -1,0 +1,13 @@
+/* Stylesheet */
+
+svg { 
+	margin: 20px;
+	background-color: #eee;
+}
+.axis path {
+	 fill: none;
+	 stroke: black;
+}
+.axis line {
+	stroke: black;
+}
