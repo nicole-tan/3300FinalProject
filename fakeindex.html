@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="styles/styles.css">
+</head>
+<body>
+
+	<script>
+	//console.log('in script tag');
+
+function Click() {
+	var checkedValue = document.querySelectorAll('.genre_class:checked');
+	var checked_array = [];
+	for (var i = 0; i < checkedValue.length; i++) {
+		console.log(checkedValue[i].value);
+		checked_array.push(checkedValue[i].value);
+	}
+		//console.log(checked_array);
+		return false;
+}
+
+
+</script>
+
+
+<form id = "genre_form">
+	<input type = "checkbox" class = "genre_class" name = "genres[]" value = "action" checked> Action <br>
+	<input type = "checkbox" class = "genre_class" name = "genres[]" value = "adventure" checked> Adventure <br>
+	<input type = "checkbox" class = "genre_class"  name = "genres[]" value = "comedy"> Comedy <br>
+	<input type = "checkbox" class = "genre_class" name = "genres[]" value = "documentary"> Documentary <br>
+	<input type = "checkbox" class = "genre_class" name = "genres[]" value = "drama"> Drama <br>
+	<input type = "checkbox" class = "genre_class" name = "genres[]" value = "musical"> Musical <br>
+	<input type = "checkbox" class = "genre_class" name = "genres[]" value = "tsh"> Thriller/Suspense/Horror <br>
+	<input type = "submit" name = "submit_genre" onclick = "Click(); return false;"  value = "Submit" >
+</form>
+
+
+
+
+
+
+</body>
+</html>
