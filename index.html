@@ -62,6 +62,7 @@
 		function Click() {
 			//clear existing lines
 			svgGenre.selectAll("path.genreLine").remove();
+			svgGenre.selectAll("circle.genreCirc").remove();
 			//Get genres selected in form
 			var checkedValue = document.querySelectorAll('.genre_class:checked');
 			var checked_array = [];
@@ -109,7 +110,7 @@
 					shareArray.forEach( function (g) {
 						svgGenre.append("circle").attr("cx", xScale(g.x))
 						.attr("cy", yScale(g.y)).attr("r", 4)
-						.attr("fill", color);
+						.attr("fill", color).attr("class", "genreCirc");
 					})
 				});
 				
