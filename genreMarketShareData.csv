@@ -1,4 +1,4 @@
-ID,Genre,Year,%share
+ID,Genre,Year,Share
 1,action,1995,19.76
 2,action,1996,21.57
 3,action,1997,22.92
@@ -75,7 +75,7 @@ ID,Genre,Year,%share
 74,drama,2002,17.33
 75,drama,2003,12.05
 76,drama,2004,14.87
-77,drama,2005, 16/13
+77,drama,2005,16.13
 78,drama,2006,17.05
 79,drama,2007,13.25
 80,drama,2008,11.14
