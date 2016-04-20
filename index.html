@@ -11,14 +11,14 @@
 
 	<div id="form">
 		<form id = "genre_form">
-	<input type = "checkbox" class = "genre_class" name = "genres[]" value = "action" checked> Action <br>
-	<input type = "checkbox" class = "genre_class" name = "genres[]" value = "adventure" checked> Adventure <br>
-	<input type = "checkbox" class = "genre_class"  name = "genres[]" value = "comedy"> Comedy <br>
-	<input type = "checkbox" class = "genre_class" name = "genres[]" value = "documentary"> Documentary <br>
-	<input type = "checkbox" class = "genre_class" name = "genres[]" value = "drama"> Drama <br>
-	<input type = "checkbox" class = "genre_class" name = "genres[]" value = "musical"> Musical <br>
-	<input type = "checkbox" class = "genre_class" name = "genres[]" value = "tsh"> Thriller/Suspense/Horror <br>
-	<input type = "submit" name = "submit_genre" onclick = "Click(); return false;"  value = "Submit" >
+			<input type = "checkbox" class = "genre_class" name = "genres[]" value = "action" checked> Action <br>
+			<input type = "checkbox" class = "genre_class" name = "genres[]" value = "adventure" checked> Adventure <br>
+			<input type = "checkbox" class = "genre_class"  name = "genres[]" value = "comedy"> Comedy <br>
+			<input type = "checkbox" class = "genre_class" name = "genres[]" value = "documentary"> Documentary <br>
+			<input type = "checkbox" class = "genre_class" name = "genres[]" value = "drama"> Drama <br>
+			<input type = "checkbox" class = "genre_class" name = "genres[]" value = "musical"> Musical <br>
+			<input type = "checkbox" class = "genre_class" name = "genres[]" value = "tsh"> Thriller/Suspense/Horror <br>
+			<input type = "submit" name = "submit_genre" onclick = "Click(); return false;"  value = "Submit" >
 	</form>
 </div>
 
@@ -27,16 +27,17 @@
 		var genreWidth = 1000,
     		genreHeight = 667,
     		padding = 90;
-    	var genreMap;
+
+    	var genreMap, shareArray;
 
     	var svgGenre = d3.select("#genreMarket").append("svg")
     		.attr("width", genreWidth)
     		.attr("height", genreHeight);
 
     	var xScale = d3.scale.linear().domain([1994.5,2016]).range([padding, genreWidth-padding]);
-    	var yScale = d3.scale.linear().domain([0,100]).range([genreHeight-padding, padding]);
+    	var yScale = d3.scale.linear().domain([0,50]).range([genreHeight-padding, padding]);
 
-    	var xAxis = d3.svg.axis().scale(xScale).orient("bottom");
+    	var xAxis = d3.svg.axis().scale(xScale).orient("bottom").tickFormat(d3.format("d"));
     	var yAxis = d3.svg.axis().scale(yScale).orient("left");
 
     	svgGenre.append("g").attr("class", "axis")
@@ -53,24 +54,70 @@
 			.attr("transform", "rotate(270 80 310)");
 
 
+		//store function for making a line in variable
+		var makeLine = d3.svg.line().x(function(d) { return xScale(d.x) })
+			.y(function(d) { return yScale(d.y)});
+
+
 		function Click() {
+			//clear existing lines
+			svgGenre.selectAll("path.genreLine").remove();
+			//Get genres selected in form
 			var checkedValue = document.querySelectorAll('.genre_class:checked');
 			var checked_array = [];
 			for (var i = 0; i < checkedValue.length; i++) {
-				console.log(checkedValue[i].value);
+				//console.log(checkedValue[i].value);
+				//add genres to checked_array
 				checked_array.push(checkedValue[i].value);
 			}
-				//console.log(checked_array);
-				return false;
-		}
-		d3.csv("data/genreMarketShareData.csv", function(error, rows) {
-			var genreIDs = [];
 
-			genreMap = d3.map(rows, function(id) {
-				genreIDs.push(id.ID);
-				return Number(id.ID);
+			d3.csv("data/genreMarketShareData.csv", function(error, rows) {
+				//Array to keep track of ID's of data for access later
+				genreMap = d3.map(rows, function(id) {
+					//Make ID key to object in map
+					return Number(id.ID);
+				});
+
+				//for each genre selected
+				checked_array.forEach(function (d) {
+					//initialize data array
+					shareArray= [];
+					for (var j = 0; j < genreMap.size(); j++) {
+						//if the genre of data element matches selected genre
+						if (genreMap.get(j+1).Genre == d) {
+							//create object with x-val(year) and y-val(market share)
+
+							var coord = {'x': genreMap.get(j+1).Year, 
+							'y': genreMap.get(j+1).Share};
+							//add "coordinate" to array
+							shareArray.push(coord);
+						}
+					}
+					//select color based on genre
+					var color;
+					if (d == "action") { color = "blue"; }
+					if (d == "adventure") { color = "green"; }
+					if (d == "comedy") { color = "orange"; }
+					if (d == "drama") { color = "purple"; }
+					if (d == "documentary") { color = "red"; }
+					if (d == "musical") { color = "pink"; }
+					if (d == "tsh") { color = "black"; }
+					//create line
+					svgGenre.append("path").attr("d", makeLine(shareArray))
+					.attr("stroke", color).attr("fill", "none").attr("stroke-width", 2).attr("class", "genreLine");
+					//create circles
+					shareArray.forEach( function (g) {
+						svgGenre.append("circle").attr("cx", xScale(g.x))
+						.attr("cy", yScale(g.y)).attr("r", 4)
+						.attr("fill", color);
+					})
+				});
+				
 			});
-		});
+
+
+		}
+	
 
 
 
