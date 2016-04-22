@@ -91,7 +91,7 @@
 		var makeLine = d3.svg.line().x(function(d) { return xScale(d.x) })
 			.y(function(d) { return yScale(d.y)});
 
-		d3.csv("data/genreMarketShareData.csv", function(error, rows) {
+		d3.csv("genreMarketShareData.csv", function(error, rows) {
 				//Array to keep track of ID's of data for access later
 				genreMap = d3.map(rows, function(id) {
 					//Make ID key to object in map

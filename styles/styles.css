@@ -45,3 +45,54 @@ svg {
 .buttonToggle:hover{
 	opacity: .6;
 }
+
+.actionLine {
+  stroke-dasharray: 1250;
+  stroke-dashoffset: 1200;
+  animation: dash 1s linear forwards;
+}
+
+/**doesn't work*/
+.adventureLine {
+   stroke-dasharray: 1250;
+  stroke-dashoffset: 1200;
+  animation: dash 1s linear forwards;
+}
+
+.comedyLine {
+	  stroke-dasharray: 1250;
+  stroke-dashoffset: 1200;
+  animation: dash 1s linear forwards;
+}
+
+.documentaryLine {
+	  stroke-dasharray: 1250;
+  stroke-dashoffset: 1200;
+  animation: dash 1s linear forwards;
+}
+
+.dramaLine {
+	  stroke-dasharray: 1250;
+  stroke-dashoffset: 1200;
+  animation: dash 1s linear forwards;
+}
+
+.musicalLine {
+	  stroke-dasharray: 1250;
+  stroke-dashoffset: 1200;
+  animation: dash 1s linear forwards;
+}
+
+.tshLine {
+	  stroke-dasharray: 1250;
+  stroke-dashoffset: 1200;
+  animation: dash 1s linear forwards;
+}
+
+
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
