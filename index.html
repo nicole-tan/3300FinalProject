@@ -5,12 +5,20 @@
 </head>
 <body>
 
+	<h1 id="title"> Movie Genres </h1>
 	<div id="genreMarket">
 
 	</div>
 
 	<div id="form">
-		<form id = "genre_form">
+		<button type="button" id="actButton" class="buttonToggle" onClick="ClickAction(); return false;"> Action </button>
+		<button type="button" id="advButton" class="buttonToggle" onClick="ClickAdventure(); return false;"> Adventure </button>
+		<button type="button" id="comButton" class="buttonToggle" onClick="ClickComedy(); return false;"> Comedy </button>
+		<button type="button" id="docButton" class="buttonToggle" onClick="ClickDocumentary(); return false;"> Documentary </button>
+		<button type="button" id="draButton" class="buttonToggle" onClick="ClickDrama(); return false;"> Drama </button>
+		<button type="button" id="musButton" class="buttonToggle" onClick="ClickMusical(); return false;"> Musical </button>
+		<button type="button" id="tshButton" class="buttonToggle" onClick="ClickTSH(); return false;"> Thriller/Suspense/Horror </button>
+		<!--<form id = "genre_form">
 			<input type = "checkbox" class = "genre_class" name = "genres[]" value = "action" checked> Action <br>
 			<input type = "checkbox" class = "genre_class" name = "genres[]" value = "adventure" checked> Adventure <br>
 			<input type = "checkbox" class = "genre_class"  name = "genres[]" value = "comedy"> Comedy <br>
@@ -19,7 +27,8 @@
 			<input type = "checkbox" class = "genre_class" name = "genres[]" value = "musical"> Musical <br>
 			<input type = "checkbox" class = "genre_class" name = "genres[]" value = "tsh"> Thriller/Suspense/Horror <br>
 			<input type = "submit" name = "submit_genre" onclick = "Click(); return false;"  value = "Submit" >
-	</form>
+	</form>-->
+
 </div>
 
 
@@ -28,7 +37,31 @@
     		genreHeight = 667,
     		padding = 90;
 
-    	var genreMap, shareArray;
+    	var actTog = "off";
+    	var advTog = "off";
+    	var comTog = "off";
+    	var draTog = "off";
+    	var docTog = "off"; 
+    	var musTog = "off";
+    	var tshTog = "off";
+
+    	var genreMap, color;
+
+    	var actArray = [];
+    	var advArray = [];
+    	var comArray = [];
+    	var docArray = [];
+    	var draArray = [];
+    	var musArray = [];
+    	var tshArray = [];
+
+    	actBut = document.getElementById("actButton");
+    	advBut = document.getElementById("advButton");
+    	comBut = document.getElementById("comButton");
+    	docBut = document.getElementById("docButton");
+    	draBut = document.getElementById("draButton");
+    	musBut = document.getElementById("musButton");
+    	tshBut = document.getElementById("tshButton");
 
     	var svgGenre = d3.select("#genreMarket").append("svg")
     		.attr("width", genreWidth)
@@ -42,24 +75,272 @@
 
     	svgGenre.append("g").attr("class", "axis")
 			.attr("transform", "translate(0," + yScale(0) + ")")
-			.call(xAxis).selectAll("text").attr("font-size", 12);
+			.call(xAxis).selectAll("text").attr("font-size", 12).attr("stroke", "white");
 
 		svgGenre.append("g").attr("class", "axis")
 			.attr("transform", "translate(" + xScale(1994.5) + ",0)")
-			.call(yAxis).selectAll("text").attr("font-size", 13);
+			.call(yAxis).selectAll("text").attr("font-size", 13).attr("stroke", "white");
 
-		svgGenre.append("text").text("Title").attr("x", 475).attr("y", 30).style("font-style", "arial").style("font-size", 20);
-		svgGenre.append("text").text("Year").attr("x", 475).attr("y", 635).style("font-style", "arial").style("font-size", 20);
+		svgGenre.append("text").text("Title").attr("x", 475).attr("y", 30).style("font-style", "arial").style("font-size", 20).style("fill", "white");
+		svgGenre.append("text").text("Year").attr("x", 475).attr("y", 635).style("font-style", "arial").style("font-size", 20).style("fill", "white");
 		svgGenre.append("text").text("% Market Share").attr("x", 2).attr("y", 250).style("font-style", "arial").style("font-size", 20)
-			.attr("transform", "rotate(270 80 310)");
+			.attr("transform", "rotate(270 80 310)").style("fill","white");
 
 
 		//store function for making a line in variable
 		var makeLine = d3.svg.line().x(function(d) { return xScale(d.x) })
 			.y(function(d) { return yScale(d.y)});
 
+		d3.csv("data/genreMarketShareData.csv", function(error, rows) {
+				//Array to keep track of ID's of data for access later
+				genreMap = d3.map(rows, function(id) {
+					//Make ID key to object in map
+					return Number(id.ID);
+				});
 
-		function Click() {
+				var coord;
+				for (var j = 0; j < genreMap.size(); j++) {
+					var thisGenre = genreMap.get(j+1).Genre;
+					if (thisGenre == "action"){
+						coord = {'x': genreMap.get(j+1).Year, 
+						'y': genreMap.get(j+1).Share};
+						actArray.push(coord);
+					}
+					if (thisGenre == "adventure"){
+						coord = {'x': genreMap.get(j+1).Year, 
+						'y': genreMap.get(j+1).Share};
+						advArray.push(coord);
+					}
+					if (thisGenre == "comedy"){
+						coord = {'x': genreMap.get(j+1).Year, 
+						'y': genreMap.get(j+1).Share};
+						comArray.push(coord);
+					}
+					if (thisGenre == "documentary"){
+						coord = {'x': genreMap.get(j+1).Year, 
+						'y': genreMap.get(j+1).Share};
+						docArray.push(coord);
+					}
+					if (thisGenre == "drama"){
+						coord = {'x': genreMap.get(j+1).Year, 
+						'y': genreMap.get(j+1).Share};
+						draArray.push(coord);
+					}
+					if (thisGenre == "musical"){
+						coord = {'x': genreMap.get(j+1).Year, 
+						'y': genreMap.get(j+1).Share};
+						musArray.push(coord);
+					}
+					if (thisGenre == "tsh"){
+						coord = {'x': genreMap.get(j+1).Year, 
+						'y': genreMap.get(j+1).Share};
+						tshArray.push(coord);
+					}
+				}
+			});
+
+
+		function ClickAction() {
+			//clear existing lines
+			if (actTog == "on") {
+				svgGenre.selectAll("path.actionLine").remove();
+				svgGenre.selectAll("circle.actionCirc").remove();
+				actBut.style.backgroundColor = "#1c1c1c";
+				actBut.style.color = "white";
+				actTog = "off";
+			}
+			else{
+
+				color = "#2E2EFE"; //blue
+				//create line
+				svgGenre.append("path").attr("d", makeLine(actArray))
+					.attr("stroke", color).attr("fill", "none").attr("stroke-width", 2).attr("class", "actionLine");
+					//create circles
+				actArray.forEach( function (g) {
+					svgGenre.append("circle").attr("cx", xScale(g.x))
+						.attr("cy", yScale(g.y)).attr("r", 4)
+						.attr("fill", color).attr("class", "actionCirc")
+						.transition().duration(1000);
+				});
+				actBut.style.backgroundColor = color;
+				actBut.style.color = "#1c1c1c";
+				actTog = "on";
+			}
+		}
+
+		function ClickAdventure() {
+			//clear existing lines
+			if (advTog == "on") {
+				svgGenre.selectAll("path.adventureLine").remove();
+				svgGenre.selectAll("circle.adventureCirc").remove();
+				advBut.style.backgroundColor = "#1c1c1c";
+				advBut.style.color = "white";
+				advTog = "off";
+			}
+			else{
+				//create line
+				color = "#9AFE2E"; //green
+				svgGenre.append("path").attr("d", makeLine(advArray))
+					.attr("stroke", color).attr("fill", "none").attr("stroke-width", 2).attr("class", "adventureLine");
+					//create circles
+				advArray.forEach( function (g) {
+					svgGenre.append("circle").attr("cx", xScale(g.x))
+						.attr("cy", yScale(g.y)).attr("r", 4)
+						.attr("fill", color).attr("class", "adventureCirc");
+				});
+				advBut.style.backgroundColor = color;
+				advBut.style.color = "#1c1c1c";
+				advTog = "on";
+			}
+		}
+		
+		function ClickComedy() {
+			//clear existing lines
+			if (comTog == "on") {
+				svgGenre.selectAll("path.comedyLine").remove();
+				svgGenre.selectAll("circle.comedyCirc").remove();
+				comBut.style.backgroundColor = "#1c1c1c";
+				comBut.style.color = "white";
+				comTog = "off";
+			}
+			else{
+				//create line
+				color = "#FE9A2E"; //orange
+				svgGenre.append("path").attr("d", makeLine(comArray))
+					.attr("stroke", color).attr("fill", "none").attr("stroke-width", 2).attr("class", "comedyLine");
+					//create circles
+				comArray.forEach( function (g) {
+					svgGenre.append("circle").attr("cx", xScale(g.x))
+						.attr("cy", yScale(g.y)).attr("r", 4)
+						.attr("fill", color).attr("class", "comedyCirc");
+				});
+				comBut.style.backgroundColor = color;
+				comBut.style.color = "#1c1c1c";
+				comTog = "on";
+			}
+		}
+
+		function ClickDocumentary() {
+			//clear existing lines
+			if (docTog == "on") {
+				svgGenre.selectAll("path.documentaryLine").remove();
+				svgGenre.selectAll("circle.documentaryCirc").remove();
+				docBut.style.backgroundColor = "#1c1c1c";
+				docBut.style.color = "white";
+				docTog = "off";
+			}
+			else{
+				//create line
+				color = "#FE2E2E"; //red
+				svgGenre.append("path").attr("d", makeLine(docArray))
+					.attr("stroke", color).attr("fill", "none").attr("stroke-width", 2).attr("class", "documentaryLine");
+					//create circles
+				docArray.forEach( function (g) {
+					svgGenre.append("circle").attr("cx", xScale(g.x))
+						.attr("cy", yScale(g.y)).attr("r", 4)
+						.attr("fill", color).attr("class", "documentaryCirc");
+				});
+				docBut.style.backgroundColor = color;
+				docBut.style.color = "#1c1c1c";
+				docTog = "on";
+			}
+		}
+
+		function ClickDrama() {
+			//clear existing lines
+			if (draTog == "on") {
+				svgGenre.selectAll("path.dramaLine").remove();
+				svgGenre.selectAll("circle.dramaCirc").remove();
+				draBut.style.backgroundColor = "#1c1c1c";
+				draBut.style.color = "white";
+				draTog = "off";
+			}
+			else{
+				//create line
+				color = "#9A2EFE"; //purple
+				svgGenre.append("path").attr("d", makeLine(draArray))
+					.attr("stroke", color).attr("fill", "none").attr("stroke-width", 2).attr("class", "dramaLine");
+					//create circles
+				draArray.forEach( function (g) {
+					svgGenre.append("circle").attr("cx", xScale(g.x))
+						.attr("cy", yScale(g.y)).attr("r", 4)
+						.attr("fill", color).attr("class", "dramaCirc");
+				});
+				draBut.style.backgroundColor = color;
+				draBut.style.color = "#1c1c1c";
+				draTog = "on";
+			}
+		}
+
+		function ClickMusical() {
+			//clear existing lines
+			if (musTog == "on") {
+				svgGenre.selectAll("path.musicalLine").remove();
+				svgGenre.selectAll("circle.musicalCirc").remove();
+				musBut.style.backgroundColor = "#1c1c1c";
+				musBut.style.color = "white";
+				musTog = "off";
+			}
+			else{
+				//create line
+				color = "#FA58F4"; //pink
+				svgGenre.append("path").attr("d", makeLine(musArray))
+					.attr("stroke", color).attr("fill", "none").attr("stroke-width", 2).attr("class", "musicalLine");
+					//create circles
+				musArray.forEach( function (g) {
+					svgGenre.append("circle").attr("cx", xScale(g.x))
+						.attr("cy", yScale(g.y)).attr("r", 4)
+						.attr("fill", color).attr("class", "musicalCirc");
+				});
+				musBut.style.backgroundColor = color;
+				musBut.style.color = "#1c1c1c";
+				musTog = "on";
+			}
+		}
+
+
+		function ClickTSH() {
+			//clear existing lines
+			if (tshTog == "on") {
+				svgGenre.selectAll("path.tshLine").remove();
+				svgGenre.selectAll("circle.tshCirc").remove();
+				tshBut.style.backgroundColor = "#1c1c1c";
+				tshBut.style.color = "white";
+				tshTog = "off";
+			}
+			else{
+				//create line
+				color = "#F4FA58"; //yellow
+				svgGenre.append("path").attr("d", makeLine(tshArray))
+					.attr("stroke", color).attr("fill", "none").attr("stroke-width", 2).attr("class", "tshLine");
+					//create circles
+				tshArray.forEach( function (g) {
+					svgGenre.append("circle").attr("cx", xScale(g.x))
+						.attr("cy", yScale(g.y)).attr("r", 4)
+						.attr("fill", color).attr("class", "tshCirc");
+				});
+				tshBut.style.backgroundColor = color;
+				tshBut.style.color = "#1c1c1c";
+				tshTog = "on";
+			}
+		}
+	
+
+
+
+
+	</script>
+
+
+
+
+
+
+
+
+
+<script> //OLD CODE
+	function Click() {
 			//clear existing lines
 			svgGenre.selectAll("path.genreLine").remove();
 			svgGenre.selectAll("circle.genreCirc").remove();
@@ -96,13 +377,13 @@
 					}
 					//select color based on genre
 					var color;
-					if (d == "action") { color = "blue"; }
-					if (d == "adventure") { color = "green"; }
-					if (d == "comedy") { color = "orange"; }
-					if (d == "drama") { color = "purple"; }
-					if (d == "documentary") { color = "red"; }
-					if (d == "musical") { color = "pink"; }
-					if (d == "tsh") { color = "black"; }
+					if (d == "action") { color = "#2E2EFE"; } //blue
+					if (d == "adventure") { color = "#9AFE2E"; } //green
+					if (d == "comedy") { color = "#FE9A2E"; } //orange
+					if (d == "drama") { color = "#9A2EFE"; } //purple
+					if (d == "documentary") { color = "#FE2E2E"; } //red
+					if (d == "musical") { color = "#FA58F4"; } //pink
+					if (d == "tsh") { color = "#F4FA58"; }  //yellow
 					//create line
 					svgGenre.append("path").attr("d", makeLine(shareArray))
 					.attr("stroke", color).attr("fill", "none").attr("stroke-width", 2).attr("class", "genreLine");
@@ -115,20 +396,9 @@
 				});
 				
 			});
+}
 
-
-		}
-	
-
-
-
-
-	</script>
-
-
-
-
-
+</script>
 
 </body>
 </html>
