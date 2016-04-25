@@ -25,45 +25,38 @@
 
 		<div id="part2">
 			<div class="genreSegment">
-				<div class="third"><h2> Action </h2></div>
+				<div class="third"><h2 class="regTitle"> Action </h2></div>
 				<div class="third" id="actBudgetReg"></div>
-				<div class="third" id="actMarketReg"></div>
-				<div class="statText"> Text </div>
+				<div class="statText"> Text <button type="button" onClick="regClick(); return false;">CLICK</button></div>
 			</div>
 			<div class="genreSegment">
-				<div class="third"><h2> Adventure </h2></div>
+				<div class="third"><h2 class="regTitle"> Adventure </h2></div>
 				<div class="third" id="advBudgetReg"></div>
-				<div class="third" id="advMarketReg"></div>
 				<div class="statText"> Text </div>
 			</div>
 			<div class="genreSegment">
-				<div class="third"><h2> Comedy </h2></div>
+				<div class="third"><h2 class="regTitle"> Comedy </h2></div>
 				<div class="third" id="comBudgetReg"></div>
-				<div class="third" id="comMarketReg"></div>
 				<div class="statText"> Text </div>
 			</div>
 			<div class="genreSegment">
-				<div class="third"><h2> Documentary </h2></div>
+				<div class="third"><h2 class="regTitle"> Documentary </h2></div>
 				<div class="third" id="docBudgetReg"></div>
-				<div class="third" id="docMarketReg"></div>
 				<div class="statText"> Text </div>
 			</div>
 			<div class="genreSegment">
-				<div class="third"><h2> Drama </h2></div>
+				<div class="third"><h2 class="regTitle"> Drama </h2></div>
 				<div class="third" id="draBudgetReg"></div>
-				<div class="third" id="draMarketReg"></div>
 				<div class="statText"> Text </div>
 			</div>
 			<div class="genreSegment">
-				<div class="third"><h2> Musical </h2></div>
+				<div class="third"><h2 class="regTitle"> Musical </h2></div>
 				<div class="third" id="musBudgetReg"></div>
-				<div class="third" id="musMarketReg"></div>
 				<div class="statText"> Text </div>
 			</div>
 			<div class="genreSegment">
-				<div class="third"><h2> Thriller/Horror/Suspense </h2></div>
+				<div class="third"><h2 class="regTitle"> Thriller/Horror/Suspense </h2></div>
 				<div class="third" id="tshBudgetReg"></div>
-				<div class="third" id="tshMarketReg"></div>
 				<div class="statText"> Text </div>
 			</div>
 		</div>
@@ -137,7 +130,7 @@
 
 		
 
-		d3.csv("genreMarketShareData.csv", function(error, rows) {
+		d3.csv("data/genreMarketShareData.csv", function(error, rows) {
 				//Array to keep track of ID's of data for access later
 				genreMap = d3.map(rows, function(id) {
 					//Make ID key to object in map
@@ -198,7 +191,7 @@
 			}
 			else{
 
-				color = "#2E2EFE"; //blue
+				color = "#00CCFF"; //blue
 				//create line
 				svgGenre.append("path").attr("d", makeLine(actArray))
 					.attr("stroke", color).attr("fill", "none").attr("stroke-width", 2).attr("class", "actionLine");
@@ -376,8 +369,9 @@
 	</script>
 	<script>
 
-		var regHeight = 700,
-			regWidth = 1400;
+		var regHeight = 300,
+			regWidth = 500,
+			regPadding = 70;
 
 		var actPoints = [],
 			advPoints = [],
@@ -389,23 +383,105 @@
 
 		var regMap;
 
-		var svgReg = d3.select("#regression").append("svg")
+    	var svgActReg = d3.select("#actBudgetReg").append("svg")
     		.attr("width", regWidth)
     		.attr("height", regHeight);
 
-    	var xScaleReg = d3.scale.linear().domain([0,300]).range([padding, regWidth-padding]);
-    	var yScaleReg = d3.scale.linear().domain([0,1000]).range([regHeight-padding, padding]);
+    	var svgAdvReg = d3.select("#advBudgetReg").append("svg")
+    		.attr("width", regWidth)
+    		.attr("height", regHeight);
 
+    	var svgComReg = d3.select("#comBudgetReg").append("svg")
+    		.attr("width", regWidth)
+    		.attr("height", regHeight);
+
+    	var svgDocReg = d3.select("#docBudgetReg").append("svg")
+    		.attr("width", regWidth)
+    		.attr("height", regHeight);
+
+    	var svgDraReg = d3.select("#draBudgetReg").append("svg")
+    		.attr("width", regWidth)
+    		.attr("height", regHeight);
+
+    	var svgMusReg = d3.select("#musBudgetReg").append("svg")
+    		.attr("width", regWidth)
+    		.attr("height", regHeight);
+
+    	var svgTshReg = d3.select("#tshBudgetReg").append("svg")
+    		.attr("width", regWidth)
+    		.attr("height", regHeight);
+
+    	var yScaleAReg = d3.scale.linear().domain([10,30]).range([regHeight-regPadding, regPadding]);
+    	var yScaleBReg = d3.scale.linear().domain([10,20]).range([regHeight-regPadding, regPadding]);
+    	var yScaleCReg = d3.scale.linear().domain([0,10]).range([regHeight-regPadding, regPadding]);
+    	var xScaleReg = d3.scale.linear().domain([0,1000]).range([regPadding, regWidth-regPadding]);
+
+    	var yAxisAReg = d3.svg.axis().scale(yScaleAReg).orient("left").tickFormat(d3.format("d"));
+    	var yAxisBReg = d3.svg.axis().scale(yScaleBReg).orient("left").tickFormat(d3.format("d"));
+    	var yAxisCReg = d3.svg.axis().scale(yScaleCReg).orient("left").tickFormat(d3.format("d"));
     	var xAxisReg = d3.svg.axis().scale(xScaleReg).orient("bottom").tickFormat(d3.format("d"));
-    	var yAxisReg = d3.svg.axis().scale(yScaleReg).orient("left");
 
-    	svgReg.append("g").attr("class", "axisReg")
-			.attr("transform", "translate(0," + yScaleReg(0) + ")")
+
+    	svgActReg.append("g").attr("class", "axisReg")
+			.attr("transform", "translate(0," + yScaleAReg(10) + ")")
 			.call(xAxisReg).selectAll("text").attr("font-size", 12).attr("stroke", "white");
 
-		svgReg.append("g").attr("class", "axisReg")
+		svgActReg.append("g").attr("class", "axisReg")
 			.attr("transform", "translate(" + xScaleReg(0) + ",0)")
-			.call(yAxisReg).selectAll("text").attr("font-size", 13).attr("stroke", "white");
+			.call(yAxisAReg).selectAll("text").attr("font-size", 12).attr("stroke", "white");
+
+
+		svgAdvReg.append("g").attr("class", "axisReg")
+			.attr("transform", "translate(0," + yScaleAReg(10) + ")")
+			.call(xAxisReg).selectAll("text").attr("font-size", 12).attr("stroke", "white");
+
+		svgAdvReg.append("g").attr("class", "axisReg")
+			.attr("transform", "translate(" + xScaleReg(0) + ",0)")
+			.call(yAxisAReg).selectAll("text").attr("font-size", 12).attr("stroke", "white");
+
+
+		svgComReg.append("g").attr("class", "axisReg")
+			.attr("transform", "translate(0," + yScaleAReg(10) + ")")
+			.call(xAxisReg).selectAll("text").attr("font-size", 12).attr("stroke", "white");
+
+		svgComReg.append("g").attr("class", "axisReg")
+			.attr("transform", "translate(" + xScaleReg(0) + ",0)")
+			.call(yAxisAReg).selectAll("text").attr("font-size", 12).attr("stroke", "white");
+
+		svgDocReg.append("g").attr("class", "axisReg")
+			.attr("transform", "translate(0," + yScaleCReg(0) + ")")
+			.call(xAxisReg).selectAll("text").attr("font-size", 12).attr("stroke", "white");
+
+		svgDocReg.append("g").attr("class", "axisReg")
+			.attr("transform", "translate(" + xScaleReg(0) + ",0)")
+			.call(yAxisCReg).selectAll("text").attr("font-size", 12).attr("stroke", "white");
+
+
+		svgDraReg.append("g").attr("class", "axisReg")
+			.attr("transform", "translate(0," + yScaleBReg(10) + ")")
+			.call(xAxisReg).selectAll("text").attr("font-size", 12).attr("stroke", "white");
+
+		svgDraReg.append("g").attr("class", "axisReg")
+			.attr("transform", "translate(" + xScaleReg(0) + ",0)")
+			.call(yAxisBReg).selectAll("text").attr("font-size", 12).attr("stroke", "white");
+
+
+		svgMusReg.append("g").attr("class", "axisReg")
+			.attr("transform", "translate(0," + yScaleCReg(0) + ")")
+			.call(xAxisReg).selectAll("text").attr("font-size", 12).attr("stroke", "white");
+
+		svgMusReg.append("g").attr("class", "axisReg")
+			.attr("transform", "translate(" + xScaleReg(0) + ",0)")
+			.call(yAxisCReg).selectAll("text").attr("font-size", 12).attr("stroke", "white");
+
+
+		svgTshReg.append("g").attr("class", "axisReg")
+			.attr("transform", "translate(0," + yScaleBReg(10) + ")")
+			.call(xAxisReg).selectAll("text").attr("font-size", 12).attr("stroke", "white");
+
+		svgTshReg.append("g").attr("class", "axisReg")
+			.attr("transform", "translate(" + xScaleReg(0) + ",0)")
+			.call(yAxisBReg).selectAll("text").attr("font-size", 12).attr("stroke", "white");
 
 
 		d3.csv("movieBudgetData.csv", function(error, rows) {
@@ -413,53 +489,50 @@
 				//Make ID key to object in map
 				return Number(d.ID);
 			});
-			console.log(regMap);
 
 			var coord;
 				for (var k = 0; k < regMap.size(); k++) {
 					var thisGenre = regMap.get(k+1).Genre;
-					console.log(thisGenre);
 					if (thisGenre == "action"){
 						coord = {'x': regMap.get(k+1).Budget, 
-						'y': regMap.get(k+1).Domestic};
+						'y': regMap.get(k+1).Share};
 						actPoints.push(coord);
-						console.log("Act Push");
 					}
 					if (thisGenre == "adventure"){
 						coord = {'x': regMap.get(k+1).Budget, 
-						'y': regMap.get(k+1).Domestic};
+						'y': regMap.get(k+1).Share};
 						advPoints.push(coord);
 					}
 					if (thisGenre == "comedy"){
-						coord = {'x': regMap.get(k+1).Budget,
-						'y': regMap.get(k+1).Domestic};
+						coord = {'x': regMap.get(k+1).Budget, 
+						'y': regMap.get(k+1).Share};
 						comPoints.push(coord);
 					}
 					if (thisGenre == "documentary"){
 						coord = {'x': regMap.get(k+1).Budget, 
-						'y': regMap.get(k+1).Domestic};
+						'y': regMap.get(k+1).Share};
 						docPoints.push(coord);
 					}
 					if (thisGenre == "drama"){
 						coord = {'x': regMap.get(k+1).Budget, 
-						'y': regMap.get(k+1).Domestic};
+						'y': regMap.get(k+1).Share};
 						draPoints.push(coord);
 					}
 					if (thisGenre == "musical"){
 						coord = {'x': regMap.get(k+1).Budget, 
-						'y': regMap.get(k+1).Domestic};
+						'y': regMap.get(k+1).Share};
 						musPoints.push(coord);
 					}
 					if (thisGenre == "tsh"){
 						coord = {'x': regMap.get(k+1).Budget, 
-						'y': regMap.get(k+1).Domestic};
+						'y': regMap.get(k+1).Share};
 						tshPoints.push(coord);
 					}
 				}
 
 		});
 		
-
+		console.log(regMap);
 
 
 
@@ -487,173 +560,135 @@
 				return model;
 			}
 
-			slider.oninput = function () {
-				if (slider.value <= 14) {
+			function regClick() {
+					var actRegLine = leastSquares(actPoints);
 
-					svgReg.selectAll(".advRegLine").remove();
-					svgReg.selectAll("circle.advRegCirc").remove();
-
-					var model = leastSquares(actPoints);
-					console.log(model);
-
-					svgReg.append("line")
+					svgActReg.append("line")
 						.attr("x1", xScaleReg(0))
-						.attr("y1", yScaleReg(model.slope * 0 + model.intercept))
-						.attr("x2", xScaleReg(300))
-						.attr("y2", yScaleReg(model.slope * 300 + model.intercept))
+						.attr("y1", yScaleAReg(actRegLine.slope * 0 + actRegLine.intercept))
+						.attr("x2", xScaleReg(1000))
+						.attr("y2", yScaleAReg(actRegLine.slope * 1000 + actRegLine.intercept))
 						.style("stroke", "rgb(228, 26, 28)")
 						.style("stroke-width", 3)
 						.attr("class", "actRegLine");
 
 					actPoints.forEach(function (d) {
-						svgReg.append("circle").attr("cx", xScaleReg(d.x))
-								.attr("cy", yScaleReg(d.y)).attr("r", 4)
-								.attr("fill", "blue").attr("class", "actRegCirc");
+						svgActReg.append("circle").attr("cx", xScaleReg(d.x))
+							.attr("cy", yScaleAReg(d.y)).attr("r", 4)
+							.attr("fill", "blue").attr("class", "actRegCirc");
 					})
-				}
 
-				if (slider.value > 14 && slider.value <= 28) {
-					svgReg.selectAll(".actRegLine").remove();
-					svgReg.selectAll("circle.actRegCirc").remove();
-					svgReg.selectAll(".comRegLine").remove();
-					svgReg.selectAll("circle.comRegCirc").remove();
 
-					var model = leastSquares(advPoints);
-					console.log(model);
+					var advRegLine = leastSquares(advPoints);
+			
 
-					svgReg.append("line")
+					svgAdvReg.append("line")
 						.attr("x1", xScaleReg(0))
-						.attr("y1", yScaleReg(model.slope * 0 + model.intercept))
-						.attr("x2", xScaleReg(300))
-						.attr("y2", yScaleReg(model.slope * 300 + model.intercept))
+						.attr("y1", yScaleAReg(advRegLine.slope * 0 + advRegLine.intercept))
+						.attr("x2", xScaleReg(1000))
+						.attr("y2", yScaleAReg(advRegLine.slope * 1000 + advRegLine.intercept))
 						.style("stroke", "rgb(228, 26, 28)")
 						.style("stroke-width", 3)
 						.attr("class", "advRegLine");
 
 					advPoints.forEach(function (d) {
-						svgReg.append("circle").attr("cx", xScaleReg(d.x))
-								.attr("cy", yScaleReg(d.y)).attr("r", 4)
+						svgAdvReg.append("circle").attr("cx", xScaleReg(d.x))
+								.attr("cy", yScaleAReg(d.y)).attr("r", 4)
 								.attr("fill", "green").attr("class", "advRegCirc");
 					})
-				}
 
-				if (slider.value > 28 && slider.value <= 42) {
-					svgReg.selectAll(".advRegLine").remove();
-					svgReg.selectAll("circle.advRegCirc").remove();
-					svgReg.selectAll(".docRegLine").remove();
-					svgReg.selectAll("circle.docRegCirc").remove();
 
-					var model = leastSquares(comPoints);
-					console.log(model);
+					var comRegLine = leastSquares(comPoints);
 
-					svgReg.append("line")
+
+					svgComReg.append("line")
 						.attr("x1", xScaleReg(0))
-						.attr("y1", yScaleReg(model.slope * 0 + model.intercept))
-						.attr("x2", xScaleReg(300))
-						.attr("y2", yScaleReg(model.slope * 300 + model.intercept))
+						.attr("y1", yScaleAReg(comRegLine.slope * 0 + comRegLine.intercept))
+						.attr("x2", xScaleReg(1000))
+						.attr("y2", yScaleAReg(comRegLine.slope * 1000 + comRegLine.intercept))
 						.style("stroke", "rgb(228, 26, 28)")
 						.style("stroke-width", 3)
 						.attr("class", "comRegLine");
 
 					comPoints.forEach(function (d) {
-						svgReg.append("circle").attr("cx", xScaleReg(d.x))
-								.attr("cy", yScaleReg(d.y)).attr("r", 4)
+						svgComReg.append("circle").attr("cx", xScaleReg(d.x))
+								.attr("cy", yScaleAReg(d.y)).attr("r", 4)
 								.attr("fill", "orange").attr("class", "comRegCirc");
 					})
-				}
-				if (slider.value > 42 && slider.value <= 56){
-					svgReg.selectAll(".comRegLine").remove();
-					svgReg.selectAll("circle.comRegCirc").remove();
-					svgReg.selectAll(".draRegLine").remove();
-					svgReg.selectAll("circle.draRegCirc").remove();
 
-					var model = leastSquares(docPoints);
 
-					svgReg.append("line")
+					var docRegLine = leastSquares(docPoints);
+
+					svgDocReg.append("line")
 						.attr("x1", xScaleReg(0))
-						.attr("y1", yScaleReg(model.slope * 0 + model.intercept))
-						.attr("x2", xScaleReg(300))
-						.attr("y2", yScaleReg(model.slope * 300 + model.intercept))
+						.attr("y1", yScaleCReg(docRegLine.slope * 0 + docRegLine.intercept))
+						.attr("x2", xScaleReg(1000))
+						.attr("y2", yScaleCReg(docRegLine.slope * 1000 + docRegLine.intercept))
 						.style("stroke", "rgb(228, 26, 28)")
 						.style("stroke-width", 3)
 						.attr("class", "docRegLine");
 
 					docPoints.forEach(function (d) {
-						svgReg.append("circle").attr("cx", xScaleReg(d.x))
-								.attr("cy", yScaleReg(d.y)).attr("r", 4)
+						svgDocReg.append("circle").attr("cx", xScaleReg(d.x))
+								.attr("cy", yScaleCReg(d.y)).attr("r", 4)
 								.attr("fill", "red").attr("class", "docRegCirc");
 					})
-				}
-				if (slider.value > 56 && slider.value <= 70){
-					svgReg.selectAll(".docRegLine").remove();
-					svgReg.selectAll("circle.docRegCirc").remove();
-					svgReg.selectAll(".musRegLine").remove();
-					svgReg.selectAll("circle.musRegCirc").remove();
 
-					var model = leastSquares(draPoints);
+					var draRegLine = leastSquares(draPoints);
 
-					svgReg.append("line")
+					svgDraReg.append("line")
 						.attr("x1", xScaleReg(0))
-						.attr("y1", yScaleReg(model.slope * 0 + model.intercept))
-						.attr("x2", xScaleReg(300))
-						.attr("y2", yScaleReg(model.slope * 300 + model.intercept))
+						.attr("y1", yScaleBReg(draRegLine.slope * 0 + draRegLine.intercept))
+						.attr("x2", xScaleReg(1000))
+						.attr("y2", yScaleBReg(draRegLine.slope * 1000 + draRegLine.intercept))
 						.style("stroke", "rgb(228, 26, 28)")
 						.style("stroke-width", 3)
 						.attr("class", "draRegLine");
 
 					draPoints.forEach(function (d) {
-						svgReg.append("circle").attr("cx", xScaleReg(d.x))
-								.attr("cy", yScaleReg(d.y)).attr("r", 4)
+						svgDraReg.append("circle").attr("cx", xScaleReg(d.x))
+								.attr("cy", yScaleBReg(d.y)).attr("r", 4)
 								.attr("fill", "purple").attr("class", "draRegCirc");
 					})
-				}
 
-				if (slider.value > 70 && slider.value <= 84){
-					svgReg.selectAll(".draRegLine").remove();
-					svgReg.selectAll("circle.draRegCirc").remove();
-					svgReg.selectAll(".tshRegLine").remove();
-					svgReg.selectAll("circle.tshRegCirc").remove();
 
-					var model = leastSquares(musPoints);
 
-					svgReg.append("line")
+					var musRegLine = leastSquares(musPoints);
+
+					svgMusReg.append("line")
 						.attr("x1", xScaleReg(0))
-						.attr("y1", yScaleReg(model.slope * 0 + model.intercept))
-						.attr("x2", xScaleReg(300))
-						.attr("y2", yScaleReg(model.slope * 300 + model.intercept))
+						.attr("y1", yScaleCReg(musRegLine.slope * 0 + musRegLine.intercept))
+						.attr("x2", xScaleReg(1000))
+						.attr("y2", yScaleCReg(musRegLine.slope * 1000 + musRegLine.intercept))
 						.style("stroke", "rgb(228, 26, 28)")
 						.style("stroke-width", 3)
 						.attr("class", "musRegLine");
 
 					musPoints.forEach(function (d) {
-						svgReg.append("circle").attr("cx", xScaleReg(d.x))
-								.attr("cy", yScaleReg(d.y)).attr("r", 4)
+						svgMusReg.append("circle").attr("cx", xScaleReg(d.x))
+								.attr("cy", yScaleCReg(d.y)).attr("r", 4)
 								.attr("fill", "pink").attr("class", "musRegCirc");
 					})
-				}
 
-				if (slider.value > 84){
-					svgReg.selectAll(".musRegLine").remove();
-					svgReg.selectAll("circle.musRegCirc").remove();
 
-					var model = leastSquares(tshPoints);
+					var tshRegLine = leastSquares(tshPoints);
 
-					svgReg.append("line")
+					svgTshReg.append("line")
 						.attr("x1", xScaleReg(0))
-						.attr("y1", yScaleReg(model.slope * 0 + model.intercept))
+						.attr("y1", yScaleBReg(tshRegLine.slope * 0 + tshRegLine.intercept))
 						.attr("x2", xScaleReg(300))
-						.attr("y2", yScaleReg(model.slope * 300 + model.intercept))
+						.attr("y2", yScaleBReg(tshRegLine.slope * 1000 + tshRegLine.intercept))
 						.style("stroke", "rgb(228, 26, 28)")
 						.style("stroke-width", 3)
 						.attr("class", "tshRegLine");
 
 					tshPoints.forEach(function (d) {
-						svgReg.append("circle").attr("cx", xScaleReg(d.x))
-								.attr("cy", yScaleReg(d.y)).attr("r", 4)
+						svgTshReg.append("circle").attr("cx", xScaleReg(d.x))
+								.attr("cy", yScaleBReg(d.y)).attr("r", 4)
 								.attr("fill", "yellow").attr("class", "tshRegCirc");
 					})
 				}
-			}
+
 
 	</script>
 
