@@ -1,0 +1,1134 @@
+<html>
+<head>
+	<script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="styles/styles.css">
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+</head>
+<body>
+	<div id="container">
+		<h1 id="title"> Movie Genres </h1>
+		<div id="part1">
+			<div id="genreMarket">
+			</div>
+
+			<div id="form">
+				<button type="button" id="actButton" class="buttonToggle" onClick="ClickAction(); return false;"> Action </button>
+				<button type="button" id="advButton" class="buttonToggle" onClick="ClickAdventure(); return false;"> Adventure </button>
+				<button type="button" id="comButton" class="buttonToggle" onClick="ClickComedy(); return false;"> Comedy </button>
+				<button type="button" id="docButton" class="buttonToggle" onClick="ClickDocumentary(); return false;"> Documentary </button>
+				<button type="button" id="draButton" class="buttonToggle" onClick="ClickDrama(); return false;"> Drama </button>
+				<button type="button" id="musButton" class="buttonToggle" onClick="ClickMusical(); return false;"> Musical </button>
+				<button type="button" id="tshButton" class="buttonToggle" onClick="ClickTSH(); return false;"> Thriller/Suspense/Horror </button>
+			</div>
+		</div>
+
+
+		<div id="part2">
+			<div class="genreSegment">
+				<div class="third"><h2 class="regTitle"> Action </h2></div>
+				<div class="third" id="actBudgetReg"></div>
+				<div class="statText"> Text <button type="button" onClick="regClick(); return false;">CLICK</button></div>
+			</div>
+			<div class="genreSegment">
+				<div class="third"><h2 class="regTitle"> Adventure </h2></div>
+				<div class="third" id="advBudgetReg"></div>
+				<div class="statText"> Text </div>
+			</div>
+			<div class="genreSegment">
+				<div class="third"><h2 class="regTitle"> Comedy </h2></div>
+				<div class="third" id="comBudgetReg"></div>
+				<div class="statText"> Text </div>
+			</div>
+			<div class="genreSegment">
+				<div class="third"><h2 class="regTitle"> Documentary </h2></div>
+				<div class="third" id="docBudgetReg"></div>
+				<div class="statText"> Text </div>
+			</div>
+			<div class="genreSegment">
+				<div class="third"><h2 class="regTitle"> Drama </h2></div>
+				<div class="third" id="draBudgetReg"></div>
+				<div class="statText"> Text </div>
+			</div>
+			<div class="genreSegment">
+				<div class="third"><h2 class="regTitle"> Musical </h2></div>
+				<div class="third" id="musBudgetReg"></div>
+				<div class="statText"> Text </div>
+			</div>
+			<div class="genreSegment">
+				<div class="third"><h2 class="regTitle"> Thriller/Horror/Suspense </h2></div>
+				<div class="third" id="tshBudgetReg"></div>
+				<div class="statText"> Text </div>
+			</div>
+		</div>
+
+		<div id="part3">
+			<div id="regression">
+			<div id="regGraph"></div>
+				<div id="regButtons" style="display: inline">
+				<button type="button" id="actButton2" class="buttonToggle" onClick="ClickAction2(); return false;"> Action </button>
+				<button type="button" id="advButton2" class="buttonToggle" onClick="ClickAdventure2(); return false;"> Adventure </button>
+			<!--	<button type="button" id="animButton2" class="buttonToggle" onClick="ClickAnimation2(); return false;"> Animation </button> -->
+				<button type="button" id="comButton2" class="buttonToggle" onClick="ClickComedy2(); return false;"> Comedy </button>
+				<button type="button" id="docButton2" class="buttonToggle" onClick="ClickDocumentary2(); return false;"> Documentary </button>
+				<button type="button" id="draButton2" class="buttonToggle" onClick="ClickDrama2(); return false;"> Drama </button>
+				<button type="button" id="musButton2" class="buttonToggle" onClick="ClickMusical2(); return false;"> Musical </button>
+				<button type="button" id="tshButton2" class="buttonToggle" onClick="ClickTsh2(); return false;"> Thriller/Suspense/Horror </button>
+			</div>
+		</div>
+	</div>
+
+
+	<script>
+		var genreWidth = 1000,
+    		genreHeight = 667,
+    		padding = 90;
+
+    	var actTog = "off";
+    	var advTog = "off";
+    	var comTog = "off";
+    	var draTog = "off";
+    	var docTog = "off"; 
+    	var musTog = "off";
+    	var tshTog = "off";
+
+    	var genreMap, color;
+
+    	var actArray = [];
+    	var advArray = [];
+    	var comArray = [];
+    	var docArray = [];
+    	var draArray = [];
+    	var musArray = [];
+    	var tshArray = [];
+
+    	actBut = document.getElementById("actButton");
+    	advBut = document.getElementById("advButton");
+    	comBut = document.getElementById("comButton");
+    	docBut = document.getElementById("docButton");
+    	draBut = document.getElementById("draButton");
+    	musBut = document.getElementById("musButton");
+    	tshBut = document.getElementById("tshButton");
+
+    	var svgGenre = d3.select("#genreMarket").append("svg")
+    		.attr("width", genreWidth)
+    		.attr("height", genreHeight);
+
+    	var xScale = d3.scale.linear().domain([1994.5,2016]).range([padding, genreWidth-padding]);
+    	var yScale = d3.scale.linear().domain([0,50]).range([genreHeight-padding, padding]);
+
+    	var xAxis = d3.svg.axis().scale(xScale).orient("bottom").tickFormat(d3.format("d"));
+    	var yAxis = d3.svg.axis().scale(yScale).orient("left");
+
+    	svgGenre.append("g").attr("class", "axis")
+			.attr("transform", "translate(0," + yScale(0) + ")")
+			.call(xAxis).selectAll("text").attr("font-size", 12).attr("stroke", "white");
+
+		svgGenre.append("g").attr("class", "axis")
+			.attr("transform", "translate(" + xScale(1994.5) + ",0)")
+			.call(yAxis).selectAll("text").attr("font-size", 13).attr("stroke", "white");
+
+		svgGenre.append("text").text("Title").attr("x", 475).attr("y", 30).style("font-style", "arial").style("font-size", 20).style("fill", "white");
+		svgGenre.append("text").text("Year").attr("x", 475).attr("y", 635).style("font-style", "arial").style("font-size", 20).style("fill", "white");
+		svgGenre.append("text").text("% Market Share").attr("x", 2).attr("y", 250).style("font-style", "arial").style("font-size", 20)
+			.attr("transform", "rotate(270 80 310)").style("fill","white");
+
+
+		//store function for making a line in variable
+		var makeLine = d3.svg.line().x(function(d) { return xScale(d.x) })
+			.y(function(d) { return yScale(d.y)});
+
+
+		
+
+		d3.csv("genreMarketShareData.csv", function(error, rows) {
+				//Array to keep track of ID's of data for access later
+				genreMap = d3.map(rows, function(id) {
+					//Make ID key to object in map
+					return Number(id.ID);
+				});
+
+				var coord;
+				for (var j = 0; j < genreMap.size(); j++) {
+					var thisGenre = genreMap.get(j+1).Genre;
+					if (thisGenre == "action"){
+						coord = {'x': genreMap.get(j+1).Year, 
+						'y': genreMap.get(j+1).Share};
+						actArray.push(coord);
+					}
+					if (thisGenre == "adventure"){
+						coord = {'x': genreMap.get(j+1).Year, 
+						'y': genreMap.get(j+1).Share};
+						advArray.push(coord);
+					}
+					if (thisGenre == "comedy"){
+						coord = {'x': genreMap.get(j+1).Year, 
+						'y': genreMap.get(j+1).Share};
+						comArray.push(coord);
+					}
+					if (thisGenre == "documentary"){
+						coord = {'x': genreMap.get(j+1).Year, 
+						'y': genreMap.get(j+1).Share};
+						docArray.push(coord);
+					}
+					if (thisGenre == "drama"){
+						coord = {'x': genreMap.get(j+1).Year, 
+						'y': genreMap.get(j+1).Share};
+						draArray.push(coord);
+					}
+					if (thisGenre == "musical"){
+						coord = {'x': genreMap.get(j+1).Year, 
+						'y': genreMap.get(j+1).Share};
+						musArray.push(coord);
+					}
+					if (thisGenre == "tsh"){
+						coord = {'x': genreMap.get(j+1).Year, 
+						'y': genreMap.get(j+1).Share};
+						tshArray.push(coord);
+					}
+				}
+			});
+	
+
+
+		function ClickAction() {
+			//clear existing lines
+			if (actTog == "on") {
+				svgGenre.selectAll("path.actionLine").remove();
+				svgGenre.selectAll("circle.actionCirc").remove();
+				actBut.style.backgroundColor = "#1c1c1c";
+				actBut.style.color = "white";
+				actTog = "off";
+			}
+			else{
+
+				color = "#00CCFF"; //blue
+				//create line
+				svgGenre.append("path").attr("d", makeLine(actArray))
+					.attr("stroke", color).attr("fill", "none").attr("stroke-width", 2).attr("class", "actionLine");
+					//create circles
+				actArray.forEach( function (g) {
+					svgGenre.append("circle").attr("cx", xScale(g.x))
+						.attr("cy", yScale(g.y)).attr("r", 4)
+						.attr("fill", color).attr("class", "actionCirc");
+				});
+				actBut.style.backgroundColor = color;
+				actBut.style.color = "#1c1c1c";
+				actTog = "on";
+			}
+		}
+
+		function ClickAdventure() {
+			//clear existing lines
+			if (advTog == "on") {
+				svgGenre.selectAll("path.adventureLine").remove();
+				svgGenre.selectAll("circle.adventureCirc").remove();
+				advBut.style.backgroundColor = "#1c1c1c";
+				advBut.style.color = "white";
+				advTog = "off";
+			}
+			else{
+				//create line
+				color = "#9AFE2E"; //green
+				svgGenre.append("path").attr("d", makeLine(advArray))
+					.attr("stroke", color).attr("fill", "none").attr("stroke-width", 2).attr("class", "adventureLine");
+					//create circles
+				advArray.forEach( function (g) {
+					svgGenre.append("circle").attr("cx", xScale(g.x))
+						.attr("cy", yScale(g.y)).attr("r", 4)
+						.attr("fill", color).attr("class", "adventureCirc");
+				});
+				advBut.style.backgroundColor = color;
+				advBut.style.color = "#1c1c1c";
+				advTog = "on";
+			}
+		}
+		
+		function ClickComedy() {
+			//clear existing lines
+			if (comTog == "on") {
+				svgGenre.selectAll("path.comedyLine").remove();
+				svgGenre.selectAll("circle.comedyCirc").remove();
+				comBut.style.backgroundColor = "#1c1c1c";
+				comBut.style.color = "white";
+				comTog = "off";
+			}
+			else{
+				//create line
+				color = "#FE9A2E"; //orange
+				svgGenre.append("path").attr("d", makeLine(comArray))
+					.attr("stroke", color).attr("fill", "none").attr("stroke-width", 2).attr("class", "comedyLine");
+					//create circles
+				comArray.forEach( function (g) {
+					svgGenre.append("circle").attr("cx", xScale(g.x))
+						.attr("cy", yScale(g.y)).attr("r", 4)
+						.attr("fill", color).attr("class", "comedyCirc");
+				});
+				comBut.style.backgroundColor = color;
+				comBut.style.color = "#1c1c1c";
+				comTog = "on";
+			}
+		}
+
+		function ClickDocumentary() {
+			//clear existing lines
+			if (docTog == "on") {
+				svgGenre.selectAll("path.documentaryLine").remove();
+				svgGenre.selectAll("circle.documentaryCirc").remove();
+				docBut.style.backgroundColor = "#1c1c1c";
+				docBut.style.color = "white";
+				docTog = "off";
+			}
+			else{
+				//create line
+				color = "#FE2E2E"; //red
+				svgGenre.append("path").attr("d", makeLine(docArray))
+					.attr("stroke", color).attr("fill", "none").attr("stroke-width", 2).attr("class", "documentaryLine");
+					//create circles
+				docArray.forEach( function (g) {
+					svgGenre.append("circle").attr("cx", xScale(g.x))
+						.attr("cy", yScale(g.y)).attr("r", 4)
+						.attr("fill", color).attr("class", "documentaryCirc");
+				});
+				docBut.style.backgroundColor = color;
+				docBut.style.color = "#1c1c1c";
+				docTog = "on";
+			}
+		}
+
+		function ClickDrama() {
+			//clear existing lines
+			if (draTog == "on") {
+				svgGenre.selectAll("path.dramaLine").remove();
+				svgGenre.selectAll("circle.dramaCirc").remove();
+				draBut.style.backgroundColor = "#1c1c1c";
+				draBut.style.color = "white";
+				draTog = "off";
+			}
+			else{
+				//create line
+				color = "#9A2EFE"; //purple
+				svgGenre.append("path").attr("d", makeLine(draArray))
+					.attr("stroke", color).attr("fill", "none").attr("stroke-width", 2).attr("class", "dramaLine");
+					//create circles
+				draArray.forEach( function (g) {
+					svgGenre.append("circle").attr("cx", xScale(g.x))
+						.attr("cy", yScale(g.y)).attr("r", 4)
+						.attr("fill", color).attr("class", "dramaCirc");
+				});
+				draBut.style.backgroundColor = color;
+				draBut.style.color = "#1c1c1c";
+				draTog = "on";
+			}
+		}
+
+		function ClickMusical() {
+			//clear existing lines
+			if (musTog == "on") {
+				svgGenre.selectAll("path.musicalLine").remove();
+				svgGenre.selectAll("circle.musicalCirc").remove();
+				musBut.style.backgroundColor = "#1c1c1c";
+				musBut.style.color = "white";
+				musTog = "off";
+			}
+			else{
+				//create line
+				color = "#FA58F4"; //pink
+				svgGenre.append("path").attr("d", makeLine(musArray))
+					.attr("stroke", color).attr("fill", "none").attr("stroke-width", 2).attr("class", "musicalLine");
+					//create circles
+				musArray.forEach( function (g) {
+					svgGenre.append("circle").attr("cx", xScale(g.x))
+						.attr("cy", yScale(g.y)).attr("r", 4)
+						.attr("fill", color).attr("class", "musicalCirc");
+				});
+				musBut.style.backgroundColor = color;
+				musBut.style.color = "#1c1c1c";
+				musTog = "on";
+			}
+		}
+
+
+		function ClickTSH() {
+			//clear existing lines
+			if (tshTog == "on") {
+				svgGenre.selectAll("path.tshLine").remove();
+				svgGenre.selectAll("circle.tshCirc").remove();
+				tshBut.style.backgroundColor = "#1c1c1c";
+				tshBut.style.color = "white";
+				tshTog = "off";
+			}
+			else{
+				//create line
+				color = "#F4FA58"; //yellow
+				svgGenre.append("path").attr("d", makeLine(tshArray))
+					.attr("stroke", color).attr("fill", "none").attr("stroke-width", 2).attr("class", "tshLine");
+					//create circles
+				tshArray.forEach( function (g) {
+					svgGenre.append("circle").attr("cx", xScale(g.x))
+						.attr("cy", yScale(g.y)).attr("r", 4)
+						.attr("fill", color).attr("class", "tshCirc");
+				});
+				tshBut.style.backgroundColor = color;
+				tshBut.style.color = "#1c1c1c";
+				tshTog = "on";
+			}
+		}
+
+
+
+	</script>
+	<script>
+
+		var regHeight = 300,
+			regWidth = 500,
+			regPadding = 70;
+
+		var actPoints = [],
+			advPoints = [],
+			comPoints = [],
+			docPoints = [],
+			draPoints = [],
+			musPoints = [],
+			tshPoints = [];
+
+		var regMap;
+
+    	var svgActReg = d3.select("#actBudgetReg").append("svg")
+    		.attr("width", regWidth)
+    		.attr("height", regHeight);
+
+    	var svgAdvReg = d3.select("#advBudgetReg").append("svg")
+    		.attr("width", regWidth)
+    		.attr("height", regHeight);
+
+    	var svgComReg = d3.select("#comBudgetReg").append("svg")
+    		.attr("width", regWidth)
+    		.attr("height", regHeight);
+
+    	var svgDocReg = d3.select("#docBudgetReg").append("svg")
+    		.attr("width", regWidth)
+    		.attr("height", regHeight);
+
+    	var svgDraReg = d3.select("#draBudgetReg").append("svg")
+    		.attr("width", regWidth)
+    		.attr("height", regHeight);
+
+    	var svgMusReg = d3.select("#musBudgetReg").append("svg")
+    		.attr("width", regWidth)
+    		.attr("height", regHeight);
+
+    	var svgTshReg = d3.select("#tshBudgetReg").append("svg")
+    		.attr("width", regWidth)
+    		.attr("height", regHeight);
+
+    	var yScaleAReg = d3.scale.linear().domain([10,30]).range([regHeight-regPadding, regPadding]);
+    	var yScaleBReg = d3.scale.linear().domain([10,20]).range([regHeight-regPadding, regPadding]);
+    	var yScaleCReg = d3.scale.linear().domain([0,10]).range([regHeight-regPadding, regPadding]);
+    	var xScaleReg = d3.scale.linear().domain([0,1000]).range([regPadding, regWidth-regPadding]);
+
+    	var yAxisAReg = d3.svg.axis().scale(yScaleAReg).orient("left").tickFormat(d3.format("d"));
+    	var yAxisBReg = d3.svg.axis().scale(yScaleBReg).orient("left").tickFormat(d3.format("d"));
+    	var yAxisCReg = d3.svg.axis().scale(yScaleCReg).orient("left").tickFormat(d3.format("d"));
+    	var xAxisReg = d3.svg.axis().scale(xScaleReg).orient("bottom").tickFormat(d3.format("d"));
+
+
+    	svgActReg.append("g").attr("class", "axisReg")
+			.attr("transform", "translate(0," + yScaleAReg(10) + ")")
+			.call(xAxisReg).selectAll("text").attr("font-size", 12).attr("stroke", "white");
+
+		svgActReg.append("g").attr("class", "axisReg")
+			.attr("transform", "translate(" + xScaleReg(0) + ",0)")
+			.call(yAxisAReg).selectAll("text").attr("font-size", 12).attr("stroke", "white");
+
+
+		svgAdvReg.append("g").attr("class", "axisReg")
+			.attr("transform", "translate(0," + yScaleAReg(10) + ")")
+			.call(xAxisReg).selectAll("text").attr("font-size", 12).attr("stroke", "white");
+
+		svgAdvReg.append("g").attr("class", "axisReg")
+			.attr("transform", "translate(" + xScaleReg(0) + ",0)")
+			.call(yAxisAReg).selectAll("text").attr("font-size", 12).attr("stroke", "white");
+
+
+		svgComReg.append("g").attr("class", "axisReg")
+			.attr("transform", "translate(0," + yScaleAReg(10) + ")")
+			.call(xAxisReg).selectAll("text").attr("font-size", 12).attr("stroke", "white");
+
+		svgComReg.append("g").attr("class", "axisReg")
+			.attr("transform", "translate(" + xScaleReg(0) + ",0)")
+			.call(yAxisAReg).selectAll("text").attr("font-size", 12).attr("stroke", "white");
+
+		svgDocReg.append("g").attr("class", "axisReg")
+			.attr("transform", "translate(0," + yScaleCReg(0) + ")")
+			.call(xAxisReg).selectAll("text").attr("font-size", 12).attr("stroke", "white");
+
+		svgDocReg.append("g").attr("class", "axisReg")
+			.attr("transform", "translate(" + xScaleReg(0) + ",0)")
+			.call(yAxisCReg).selectAll("text").attr("font-size", 12).attr("stroke", "white");
+
+
+		svgDraReg.append("g").attr("class", "axisReg")
+			.attr("transform", "translate(0," + yScaleBReg(10) + ")")
+			.call(xAxisReg).selectAll("text").attr("font-size", 12).attr("stroke", "white");
+
+		svgDraReg.append("g").attr("class", "axisReg")
+			.attr("transform", "translate(" + xScaleReg(0) + ",0)")
+			.call(yAxisBReg).selectAll("text").attr("font-size", 12).attr("stroke", "white");
+
+
+		svgMusReg.append("g").attr("class", "axisReg")
+			.attr("transform", "translate(0," + yScaleCReg(0) + ")")
+			.call(xAxisReg).selectAll("text").attr("font-size", 12).attr("stroke", "white");
+
+		svgMusReg.append("g").attr("class", "axisReg")
+			.attr("transform", "translate(" + xScaleReg(0) + ",0)")
+			.call(yAxisCReg).selectAll("text").attr("font-size", 12).attr("stroke", "white");
+
+
+		svgTshReg.append("g").attr("class", "axisReg")
+			.attr("transform", "translate(0," + yScaleBReg(10) + ")")
+			.call(xAxisReg).selectAll("text").attr("font-size", 12).attr("stroke", "white");
+
+		svgTshReg.append("g").attr("class", "axisReg")
+			.attr("transform", "translate(" + xScaleReg(0) + ",0)")
+			.call(yAxisBReg).selectAll("text").attr("font-size", 12).attr("stroke", "white");
+
+
+		d3.csv("movieBudgetData.csv", function(error, rows) {
+			regMap = d3.map(rows, function(d) {
+				//Make ID key to object in map
+				return Number(d.ID);
+			});
+
+			var coord;
+				for (var k = 0; k < regMap.size(); k++) {
+					var thisGenre = regMap.get(k+1).Genre;
+					if (thisGenre == "action"){
+						coord = {'x': regMap.get(k+1).Budget, 
+						'y': regMap.get(k+1).Share};
+						actPoints.push(coord);
+					}
+					if (thisGenre == "adventure"){
+						coord = {'x': regMap.get(k+1).Budget, 
+						'y': regMap.get(k+1).Share};
+						advPoints.push(coord);
+					}
+					if (thisGenre == "comedy"){
+						coord = {'x': regMap.get(k+1).Budget, 
+						'y': regMap.get(k+1).Share};
+						comPoints.push(coord);
+					}
+					if (thisGenre == "documentary"){
+						coord = {'x': regMap.get(k+1).Budget, 
+						'y': regMap.get(k+1).Share};
+						docPoints.push(coord);
+					}
+					if (thisGenre == "drama"){
+						coord = {'x': regMap.get(k+1).Budget, 
+						'y': regMap.get(k+1).Share};
+						draPoints.push(coord);
+					}
+					if (thisGenre == "musical"){
+						coord = {'x': regMap.get(k+1).Budget, 
+						'y': regMap.get(k+1).Share};
+						musPoints.push(coord);
+					}
+					if (thisGenre == "tsh"){
+						coord = {'x': regMap.get(k+1).Budget, 
+						'y': regMap.get(k+1).Share};
+						tshPoints.push(coord);
+					}
+				}
+
+		});
+		
+		console.log(regMap);
+
+
+
+		//Inspire from Professor Mimno's notes 4/18/16
+			function leastSquares(points) {
+				var model = {};
+				// Replace this with an expression that will filter
+				// out points not in the current selection
+
+				var meanX = d3.mean(points, function (d) {
+					console.log(d);
+					return Number(d.x);
+				});
+				var meanY = d3.mean(points, function (d) { 
+					return Number(d.y);
+				});
+				model.slope = d3.sum(points, function (d) {
+					return (Number(d.x) - meanX) * (Number(d.y) - meanY);
+				});
+				model.slope /= d3.sum(points, function (d) {
+					return (Number(d.x) - meanX) * (Number(d.x) - meanX);
+				});
+				model.intercept = meanY - model.slope * meanX;
+	
+				return model;
+			}
+
+			function regClick() {
+					var actRegLine = leastSquares(actPoints);
+
+					svgActReg.append("line")
+						.attr("x1", xScaleReg(0))
+						.attr("y1", yScaleAReg(actRegLine.slope * 0 + actRegLine.intercept))
+						.attr("x2", xScaleReg(1000))
+						.attr("y2", yScaleAReg(actRegLine.slope * 1000 + actRegLine.intercept))
+						.style("stroke", "rgb(228, 26, 28)")
+						.style("stroke-width", 3)
+						.attr("class", "actRegLine");
+
+					actPoints.forEach(function (d) {
+						svgActReg.append("circle").attr("cx", xScaleReg(d.x))
+							.attr("cy", yScaleAReg(d.y)).attr("r", 4)
+							.attr("fill", "blue").attr("class", "actRegCirc");
+					})
+
+
+					var advRegLine = leastSquares(advPoints);
+			
+
+					svgAdvReg.append("line")
+						.attr("x1", xScaleReg(0))
+						.attr("y1", yScaleAReg(advRegLine.slope * 0 + advRegLine.intercept))
+						.attr("x2", xScaleReg(1000))
+						.attr("y2", yScaleAReg(advRegLine.slope * 1000 + advRegLine.intercept))
+						.style("stroke", "rgb(228, 26, 28)")
+						.style("stroke-width", 3)
+						.attr("class", "advRegLine");
+
+					advPoints.forEach(function (d) {
+						svgAdvReg.append("circle").attr("cx", xScaleReg(d.x))
+								.attr("cy", yScaleAReg(d.y)).attr("r", 4)
+								.attr("fill", "green").attr("class", "advRegCirc");
+					})
+
+
+					var comRegLine = leastSquares(comPoints);
+
+
+					svgComReg.append("line")
+						.attr("x1", xScaleReg(0))
+						.attr("y1", yScaleAReg(comRegLine.slope * 0 + comRegLine.intercept))
+						.attr("x2", xScaleReg(1000))
+						.attr("y2", yScaleAReg(comRegLine.slope * 1000 + comRegLine.intercept))
+						.style("stroke", "rgb(228, 26, 28)")
+						.style("stroke-width", 3)
+						.attr("class", "comRegLine");
+
+					comPoints.forEach(function (d) {
+						svgComReg.append("circle").attr("cx", xScaleReg(d.x))
+								.attr("cy", yScaleAReg(d.y)).attr("r", 4)
+								.attr("fill", "orange").attr("class", "comRegCirc");
+					})
+
+
+					var docRegLine = leastSquares(docPoints);
+
+					svgDocReg.append("line")
+						.attr("x1", xScaleReg(0))
+						.attr("y1", yScaleCReg(docRegLine.slope * 0 + docRegLine.intercept))
+						.attr("x2", xScaleReg(1000))
+						.attr("y2", yScaleCReg(docRegLine.slope * 1000 + docRegLine.intercept))
+						.style("stroke", "rgb(228, 26, 28)")
+						.style("stroke-width", 3)
+						.attr("class", "docRegLine");
+
+					docPoints.forEach(function (d) {
+						svgDocReg.append("circle").attr("cx", xScaleReg(d.x))
+								.attr("cy", yScaleCReg(d.y)).attr("r", 4)
+								.attr("fill", "red").attr("class", "docRegCirc");
+					})
+
+					var draRegLine = leastSquares(draPoints);
+
+					svgDraReg.append("line")
+						.attr("x1", xScaleReg(0))
+						.attr("y1", yScaleBReg(draRegLine.slope * 0 + draRegLine.intercept))
+						.attr("x2", xScaleReg(1000))
+						.attr("y2", yScaleBReg(draRegLine.slope * 1000 + draRegLine.intercept))
+						.style("stroke", "rgb(228, 26, 28)")
+						.style("stroke-width", 3)
+						.attr("class", "draRegLine");
+
+					draPoints.forEach(function (d) {
+						svgDraReg.append("circle").attr("cx", xScaleReg(d.x))
+								.attr("cy", yScaleBReg(d.y)).attr("r", 4)
+								.attr("fill", "purple").attr("class", "draRegCirc");
+					})
+
+
+
+					var musRegLine = leastSquares(musPoints);
+
+					svgMusReg.append("line")
+						.attr("x1", xScaleReg(0))
+						.attr("y1", yScaleCReg(musRegLine.slope * 0 + musRegLine.intercept))
+						.attr("x2", xScaleReg(1000))
+						.attr("y2", yScaleCReg(musRegLine.slope * 1000 + musRegLine.intercept))
+						.style("stroke", "rgb(228, 26, 28)")
+						.style("stroke-width", 3)
+						.attr("class", "musRegLine");
+
+					musPoints.forEach(function (d) {
+						svgMusReg.append("circle").attr("cx", xScaleReg(d.x))
+								.attr("cy", yScaleCReg(d.y)).attr("r", 4)
+								.attr("fill", "pink").attr("class", "musRegCirc");
+					})
+
+
+					var tshRegLine = leastSquares(tshPoints);
+
+					svgTshReg.append("line")
+						.attr("x1", xScaleReg(0))
+						.attr("y1", yScaleBReg(tshRegLine.slope * 0 + tshRegLine.intercept))
+						.attr("x2", xScaleReg(300))
+						.attr("y2", yScaleBReg(tshRegLine.slope * 1000 + tshRegLine.intercept))
+						.style("stroke", "rgb(228, 26, 28)")
+						.style("stroke-width", 3)
+						.attr("class", "tshRegLine");
+
+					tshPoints.forEach(function (d) {
+						svgTshReg.append("circle").attr("cx", xScaleReg(d.x))
+								.attr("cy", yScaleBReg(d.y)).attr("r", 4)
+								.attr("fill", "yellow").attr("class", "tshRegCirc");
+					})
+				}
+
+
+	</script>
+	<script>
+
+		var regHeight2 = 700,
+			regWidth2 = 1400;
+
+		var actPoints2 = [],
+			advPoints2 = [],
+			comPoints2 = [],
+			draPoints2 = [],
+			musPoints2 = [],
+			docPoints2 = [],
+			tshPoints2 = [];
+
+    	var actTog2 = "off";
+    	var advTog2 = "off";
+    	var comTog2 = "off";
+    	var draTog2 = "off";
+    	var musTog2 = "off"; 
+    	var docTog2 = "off";
+    	var tshTog2 = "off";
+
+    	actBut2 = document.getElementById("actButton2");
+    	advBut2 = document.getElementById("advButton2");
+    	comBut2 = document.getElementById("comButton2");
+    	draBut2 = document.getElementById("draButton2");
+    	musBut2 = document.getElementById("musButton2");
+    	docBut2 = document.getElementById("docButton2");
+    	tshBut2 = document.getElementById("tshButton2");
+
+		var regMap2;
+
+		var svgReg = d3.select("#regGraph").append("svg")
+    		.attr("width", regWidth2)
+    		.attr("height", regHeight2);
+
+    	var xScaleReg2 = d3.scale.linear().domain([0,300]).range([padding, regWidth2-padding]);
+    	var yScaleReg2 = d3.scale.linear().domain([0,800]).range([regHeight2-padding, padding]);
+
+    	var xAxisReg2 = d3.svg.axis().scale(xScaleReg2).orient("bottom").tickFormat(d3.format("d"));
+    	var yAxisReg = d3.svg.axis().scale(yScaleReg2).orient("left");
+
+    	svgReg.append("g").attr("class", "axisReg")
+			.attr("transform", "translate(0," + yScaleReg2(0) + ")")
+			.call(xAxisReg2).selectAll("text").attr("font-size", 12).attr("stroke", "white");
+
+		svgReg.append("g").attr("class", "axisReg")
+			.attr("transform", "translate(" + xScaleReg2(0) + ",0)")
+			.call(yAxisReg).selectAll("text").attr("font-size", 13).attr("stroke", "white");
+
+
+		d3.csv("formattedBudgetDataCopy.csv", function(error, rows) {
+			regMap2 = d3.map(rows, function(d) {
+				//Make ID key to object in map
+				return Number(d.ID);
+			});
+
+
+			var info;
+				for (var k = 0; k < regMap2.size(); k++) {
+					var thisGenre = regMap2.get(k+1).Genre;
+					if (thisGenre == "Action"){
+						info = {'x': regMap2.get(k+1).Budget, 
+						'y': regMap2.get(k+1).Domestic,
+						'name': regMap2.get(k+1).Name,
+						'studio' : regMap2.get(k+1).Studio,
+						'rotten': regMap2.get(k+1).Rotten};
+						actPoints2.push(info);
+					}
+					if (thisGenre == "Adventure"){
+						info = {'x': regMap2.get(k+1).Budget, 
+						'y': regMap2.get(k+1).Domestic,
+						'name': regMap2.get(k+1).Name,
+						'studio' : regMap2.get(k+1).Studio,
+						'rotten': regMap2.get(k+1).Rotten};
+						advPoints2.push(info);
+					}
+					if (thisGenre == "Animation"){
+						info = {'x': regMap2.get(k+1).Budget, 
+						'y': regMap2.get(k+1).Domestic,
+						'name': regMap2.get(k+1).Name,
+						'studio' : regMap2.get(k+1).Studio,
+						'rotten': regMap2.get(k+1).Rotten};
+						animPoints2.push(info);
+					}
+					if (thisGenre == "Comedy"){
+						info = {'x': regMap2.get(k+1).Budget, 
+						'y': regMap2.get(k+1).Domestic,
+						'name': regMap2.get(k+1).Name,
+						'studio' : regMap2.get(k+1).Studio,
+						'rotten': regMap2.get(k+1).Rotten};
+						comPoints2.push(info);
+					}
+					if (thisGenre == "Drama"){
+						info = {'x': regMap2.get(k+1).Budget, 
+						'y': regMap2.get(k+1).Domestic,
+						'name': regMap2.get(k+1).Name,
+						'studio' : regMap2.get(k+1).Studio,
+						'rotten': regMap2.get(k+1).Rotten};
+						draPoints2.push(info);
+					}
+					if (thisGenre == "Musical"){
+						info = {'x': regMap2.get(k+1).Budget, 
+						'y': regMap2.get(k+1).Domestic,
+						'name': regMap2.get(k+1).Name,
+						'studio' : regMap2.get(k+1).Studio,
+						'rotten': regMap2.get(k+1).Rotten};
+						musPoints2.push(info);
+					}
+
+					if (thisGenre == "Documentary"){
+						info = {'x': regMap2.get(k+1).Budget, 
+						'y': regMap2.get(k+1).Domestic,
+						'name': regMap2.get(k+1).Name,
+						'studio' : regMap2.get(k+1).Studio,
+						'rotten': regMap2.get(k+1).Rotten};
+						docPoints2.push(info);
+					}
+
+					if (thisGenre == "Tsh"){
+						info = {'x': regMap2.get(k+1).Budget, 
+						'y': regMap2.get(k+1).Domestic,
+						'name': regMap2.get(k+1).Name,
+						'studio' : regMap2.get(k+1).Studio,
+						'rotten': regMap2.get(k+1).Rotten};
+						tshPoints2.push(info);
+					}
+				}
+
+			//display data
+			var model;
+
+			//create action svg elements
+			actPoints2.forEach( function (d) {
+				svgReg.append("circle").attr("cx", xScaleReg2(d.x))
+				.attr("cy", yScaleReg2(d.y)).attr("r", 4)
+				.attr("class","act")
+				.attr("visibility","hidden")
+				.attr("fill","#00CCFF");
+			});
+			model = leastSquares(actPoints2);
+			svgReg.append("line")
+				.attr("x1", xScaleReg2(0))
+				.attr("y1", yScaleReg2(model.slope * 0 + model.intercept))
+				.attr("x2", xScaleReg2(300))
+				.attr("y2", yScaleReg2(model.slope * 300 + model.intercept))
+				.style("stroke", "#00CCFF")
+				.style("stroke-width", 3)
+				.attr("visibility","hidden")
+				.attr("class", "act");
+			
+			//create adventure svg elements
+			advPoints2.forEach( function (d) {
+				svgReg.append("circle").attr("cx", xScaleReg2(d.x))
+				.attr("cy", yScaleReg2(d.y)).attr("r", 4)
+				.attr("class","adv")
+				.attr("visibility","hidden")
+				.attr("fill","#9AFE2E");
+			});
+			model = leastSquares(advPoints2);
+			svgReg.append("line")
+				.attr("x1", xScaleReg2(0))
+				.attr("y1", yScaleReg2(model.slope * 0 + model.intercept))
+				.attr("x2", xScaleReg2(300))
+				.attr("y2", yScaleReg2(model.slope * 300 + model.intercept))
+				.style("stroke", "#9AFE2E")
+				.style("stroke-width", 3)
+				.attr("visibility","hidden")
+				.attr("class", "adv");
+
+
+			//create animation svg elements			
+
+			//create comedy svg elements			
+			comPoints2.forEach( function (d) {
+				svgReg.append("circle").attr("cx", xScaleReg2(d.x))
+				.attr("cy", yScaleReg2(d.y)).attr("r", 4)
+				.attr("class","com")
+				.attr("visibility","hidden")
+				.attr("fill","#FE9A2E");
+			});	
+			model = leastSquares(comPoints2);
+			svgReg.append("line")
+				.attr("x1", xScaleReg2(0))
+				.attr("y1", yScaleReg2(model.slope * 0 + model.intercept))
+				.attr("x2", xScaleReg2(300))
+				.attr("y2", yScaleReg2(model.slope * 300 + model.intercept))
+				.style("stroke", "#FE9A2E")
+				.style("stroke-width", 3)
+				.attr("visibility","hidden")
+				.attr("class", "com");
+
+			//create drama svg elements			
+			draPoints2.forEach( function (d) {
+				svgReg.append("circle").attr("cx", xScaleReg2(d.x))
+				.attr("cy", yScaleReg2(d.y)).attr("r", 4)
+				.attr("class","dra")
+				.attr("visibility","hidden")
+				.attr("fill","#9A2EFE");
+			});	
+			model = leastSquares(draPoints2);
+			svgReg.append("line")
+				.attr("x1", xScaleReg2(0))
+				.attr("y1", yScaleReg2(model.slope * 0 + model.intercept))
+				.attr("x2", xScaleReg2(300))
+				.attr("y2", yScaleReg2(model.slope * 300 + model.intercept))
+				.style("stroke", "#9A2EFE")
+				.style("stroke-width", 3)
+				.attr("visibility","hidden")
+				.attr("class", "dra");
+
+			//create musical svg elements			
+			musPoints2.forEach( function (d) {
+				svgReg.append("circle").attr("cx", xScaleReg2(d.x))
+				.attr("cy", yScaleReg2(d.y)).attr("r", 4)
+				.attr("class","mus")
+				.attr("visibility","hidden")
+				.attr("fill","#FA58F4");
+			});	
+			model = leastSquares(musPoints2);
+			svgReg.append("line")
+				.attr("x1", xScaleReg2(0))
+				.attr("y1", yScaleReg2(model.slope * 0 + model.intercept))
+				.attr("x2", xScaleReg2(300))
+				.attr("y2", yScaleReg2(model.slope * 300 + model.intercept))
+				.style("stroke", "#FA58F4")
+				.style("stroke-width", 3)
+				.attr("visibility","hidden")
+				.attr("class", "mus");
+
+			//create documentary svg elements			
+			docPoints2.forEach( function (d) {
+				svgReg.append("circle").attr("cx", xScaleReg2(d.x))
+				.attr("cy", yScaleReg2(d.y)).attr("r", 4)
+				.attr("class","doc")
+				.attr("visibility","hidden")
+				.attr("fill","#FE2E2E");
+			});	
+			model = leastSquares(docPoints2);
+			svgReg.append("line")
+				.attr("x1", xScaleReg2(0))
+				.attr("y1", yScaleReg2(model.slope * 0 + model.intercept))
+				.attr("x2", xScaleReg2(300))
+				.attr("y2", yScaleReg2(model.slope * 300 + model.intercept))
+				.style("stroke", "#FE2E2E")
+				.style("stroke-width", 3)
+				.attr("visibility","hidden")
+				.attr("class", "doc");
+
+			//create thriller svg elements			
+			tshPoints2.forEach( function (d) {
+				svgReg.append("circle").attr("cx", xScaleReg2(d.x))
+				.attr("cy", yScaleReg2(d.y)).attr("r", 4)
+				.attr("class","tsh")
+				.attr("visibility","hidden")
+				.attr("fill","#F4FA58");
+			});	
+			model = leastSquares(tshPoints2);
+			svgReg.append("line")
+				.attr("x1", xScaleReg2(0))
+				.attr("y1", yScaleReg2(model.slope * 0 + model.intercept))
+				.attr("x2", xScaleReg2(300))
+				.attr("y2", yScaleReg2(model.slope * 300 + model.intercept))
+				.style("stroke", "#F4FA58")
+				.style("stroke-width", 3)
+				.attr("visibility","hidden")
+				.attr("class", "tsh");						
+
+		});
+
+		function ClickAction2() {
+			//clear existing lines
+			if (actTog2 == "on") {
+				svgReg.selectAll(".act").attr("visibility","hidden");
+				actTog2 = "off";
+				actBut2.style.backgroundColor = "#1c1c1c";
+				actBut2.style.color = "white";
+			}
+			else{
+				svgReg.selectAll(".act").attr("visibility","visible");
+				actBut2.style.backgroundColor = "#00CCFF";
+				actBut2.style.color = "#1c1c1c";
+				actTog2 = "on";
+			}
+		}
+
+		function ClickAdventure2() {
+			//clear existing lines
+			if (advTog2 == "on") {
+				svgReg.selectAll(".adv").attr("visibility","hidden");
+				advTog2 = "off";
+				advBut2.style.backgroundColor = "#1c1c1c";
+				advBut2.style.color = "white";
+
+			}
+			else{
+				svgReg.selectAll(".adv").attr("visibility","visible");
+				advBut2.style.backgroundColor = "#9AFE2E";
+				advBut2.style.color = "#1c1c1c";
+				advTog2 = "on";
+			}
+		}
+
+		function ClickAnimation2() {
+			//clear existing lines
+			if (animTog2 == "on") {
+				svgReg.selectAll(".anim").attr("visibility","hidden");
+				animTog2 = "off";
+				animBut2.style.backgroundColor = "#1c1c1c";
+				animBut2.style.color = "white";
+			}
+			else{
+				svgReg.selectAll(".anim").attr("visibility","visible");
+				animBut2.style.backgroundColor = "red";
+				animBut2.style.color = "#1c1c1c";
+				animTog2 = "on";
+			}
+		}
+
+		function ClickComedy2() {
+			//clear existing lines
+			if (comTog2 == "on") {
+				svgReg.selectAll(".com").attr("visibility","hidden");
+				comTog2 = "off";
+				comBut2.style.backgroundColor = "#1c1c1c";
+				comBut2.style.color = "white";
+			}
+			else{
+				svgReg.selectAll(".com").attr("visibility","visible");
+				comBut2.style.backgroundColor = "#FE9A2E";
+				comBut2.style.color = "#1c1c1c";
+				comTog2 = "on";
+			}
+		}
+
+		function ClickDrama2() {
+			//clear existing lines
+			if (draTog2 == "on") {
+				svgReg.selectAll(".dra").attr("visibility","hidden");
+				draTog2 = "off";
+				draBut2.style.backgroundColor = "#1c1c1c";
+				draBut2.style.color = "white";
+			}
+			else{
+				svgReg.selectAll(".dra").attr("visibility","visible");
+				draBut2.style.backgroundColor = "#9A2EFE";
+				draBut2.style.color = "#1c1c1c";
+				draTog2 = "on";
+			}
+		}
+
+		function ClickMusical2() {
+			//clear existing lines
+			if (musTog2 == "on") {
+				svgReg.selectAll(".mus").attr("visibility","hidden");
+				musTog2 = "off";
+				musBut2.style.backgroundColor = "#1c1c1c";
+				musBut2.style.color = "white";
+			}
+			else{
+				svgReg.selectAll(".mus").attr("visibility","visible");
+				musBut2.style.backgroundColor = "#FA58F4";
+				musBut2.style.color = "#1c1c1c";
+				musTog2 = "on";
+			}
+		}
+
+		function ClickDocumentary2() {
+			//clear existing lines
+			if (docTog2 == "on") {
+				svgReg.selectAll(".doc").attr("visibility","hidden");
+				docTog2 = "off";
+				docBut2.style.backgroundColor = "#1c1c1c";
+				docBut2.style.color = "white";
+			}
+			else{
+				svgReg.selectAll(".doc").attr("visibility","visible");
+				docBut2.style.backgroundColor = "#FE2E2E";
+				docBut2.style.color = "#1c1c1c";
+				docTog2 = "on";
+			}
+		}
+
+		function ClickTsh2() {
+			//clear existing lines
+			if (tshTog2 == "on") {
+				svgReg.selectAll(".tsh").attr("visibility","hidden");
+				tshTog2 = "off";
+				tshBut2.style.backgroundColor = "#1c1c1c";
+				tshBut2.style.color = "white";
+			}
+			else{
+				svgReg.selectAll(".tsh").attr("visibility","visible");
+				tshBut2.style.backgroundColor = "#F4FA58";
+				tshBut2.style.color = "#1c1c1c";
+				tshTog2 = "on";
+			}
+		}
+					
+							
+
+
+
+		//Inspire from Professor Mimno's notes 4/18/16
+			function leastSquares(points) {
+				var model = {};
+				// Replace this with an expression that will filter
+				// out points not in the current selection
+
+				var meanX = d3.mean(points, function (d) {
+					return Number(d.x);
+				});
+				var meanY = d3.mean(points, function (d) { 
+					return Number(d.y);
+				});
+				model.slope = d3.sum(points, function (d) {
+					return (Number(d.x) - meanX) * (Number(d.y) - meanY);
+				});
+				model.slope /= d3.sum(points, function (d) {
+					return (Number(d.x) - meanX) * (Number(d.x) - meanX);
+				});
+				model.intercept = meanY - model.slope * meanX;
+	
+				return model;
+			}
+
+
+	</script>	
+
+
+</body>
+</html>
