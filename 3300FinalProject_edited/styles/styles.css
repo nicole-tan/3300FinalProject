@@ -1,0 +1,145 @@
+/* Stylesheet */
+body{
+	background-color: #151515;
+	font-family: 'Open Sans', sans-serif;
+}
+svg { 
+	margin: 20px;
+	background-color: #1c1c1c;
+	border: 2px solid #1c1c1c;
+	border-radius: 20px;
+}
+#container {
+	height: 100%;
+	width: 100%;
+	position: relative;
+}
+.axis path {
+	 fill: none;
+	 stroke: white;
+}
+.axis line {
+	stroke: white;
+}
+.axisReg path {
+	fill: none;
+	stroke: white;
+}
+.axisReg line {
+	fill: none;
+	stroke: white;
+}
+#part1 {
+	margin-bottom: 10px;
+}
+#part2 {
+	margin-top: 750px;
+}
+#genreMarket {
+	float: left;
+	width: 1100px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+#form {
+	float: left;
+	width: 180px;
+	margin-left: 20px;
+	margin-top: 80px;
+}
+#title {
+	color: white;
+	margin-top: 10px;
+	margin-left:  40%;
+}
+.buttonToggle {
+	width: 165px;
+	height: 70px;
+	float: left;
+	margin-top: 10px;
+	border: 2px solid white;
+	border-radius: 20px;
+	background-color: #1c1c1c;
+	color: white;
+}
+.buttonToggle:hover{
+	opacity: .6;
+}
+
+.genreSegment {
+
+	margin-top: 10px;
+	height: 400px;
+	width: 100%;
+}
+.third {
+	width: 40%;
+	margin-top: 10px;
+	height: 100px;
+	float: left;
+	margin-left: 1%;
+}
+.statText{
+	width: 100%;
+	height: 40px;
+	border: 2px solid blue;
+	float: left;
+	margin-top: 230px;
+}
+.regTitle{
+	text-align: center;
+	color: white;
+	margin-top: 100px;
+	text-shadow: 2px 2px #ff0000;
+}
+.actionLine {
+  stroke-dasharray: 1250;
+  stroke-dashoffset: 1200;
+  animation: dash 1s linear forwards;
+}
+
+/**doesn't work*/
+.adventureLine {
+   stroke-dasharray: 1250;
+  stroke-dashoffset: 1200;
+  animation: dash 1s linear forwards;
+}
+
+.comedyLine {
+	  stroke-dasharray: 1250;
+  stroke-dashoffset: 1200;
+  animation: dash 1s linear forwards;
+}
+
+.documentaryLine {
+	  stroke-dasharray: 1250;
+  stroke-dashoffset: 1200;
+  animation: dash 1s linear forwards;
+}
+
+.dramaLine {
+	  stroke-dasharray: 1250;
+  stroke-dashoffset: 1200;
+  animation: dash 1s linear forwards;
+}
+
+.musicalLine {
+	  stroke-dasharray: 1250;
+  stroke-dashoffset: 1200;
+  animation: dash 1s linear forwards;
+}
+
+.tshLine {
+	  stroke-dasharray: 1250;
+  stroke-dashoffset: 1200;
+  animation: dash 1s linear forwards;
+}
+
+
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+

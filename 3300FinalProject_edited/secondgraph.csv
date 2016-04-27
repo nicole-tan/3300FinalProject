@@ -1,0 +1,22 @@
+ID, Genre, AvgBudget, Year, HighestBudget, Amount, MarketShare
+1,action,79.92,2010,Iron Man 2,200,14.2
+2,adventure,138.2,2010,Tangled,260,29.22
+3,comedy,34.26,2010,Gulliver's Travels,112,24.32
+4,drama,36.44,2010,The Wolfman,150,16.32 
+5,documentary,20,2010,Jackass 3-D,20,0.89
+6,musical,55,2010,Burlesque,55,0.06
+7,tsh,35.5,2010,The Tourist,100,13.74
+8,action,99.85,2011,Pirates of The Caribbean: On Stranger Ties,250,20.78
+9,adventure,119.36,2011,Cars 2,200,24.12
+10,comedy,43.29,2011,Happy Feet 2,135,24.24
+11,drama,25.01,2011,War Horse,66,14.63
+12,documentary,8.5,2011,Justin Bieber: Never Say Never,0.82
+13,musical,34.6,2011,Alvin and the Chipmunks: Chipwrecked,80,0.51
+14,tsh,31.77,2011,The Girl with the Dragon Tattoo,90,13.09
+15,action,110.39,2012,The Dark Night Rises,250,14.49
+16,adventure,115.5,2012,The Hobbit: An Unexpected Journey,200,29.75
+17,comedy,43.04,2012,Dark Shadows,150,19.3
+18,drama,36.36,2012,Cloud Atlas,102,15.15
+19,documentary,12,2012,Katy Perry: Part of Me,12,1.22
+20,musical,30.38,2012,Rock of Ages,75,2.31
+21,tsh,28.3,2012,Safe House,85,16.52
