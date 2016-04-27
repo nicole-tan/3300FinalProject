@@ -22,67 +22,29 @@
 			</div>
 		</div>
 
-
 		<div id="part2">
-			<div class="genreSegment">
-				<div class="third"><h2 class="regTitle"> Action </h2></div>
-				<div class="third" id="actBudgetReg"></div>
-				<div class="statText"> Text <button type="button" onClick="regClick(); return false;">CLICK</button></div>
-			</div>
-			<div class="genreSegment">
-				<div class="third"><h2 class="regTitle"> Adventure </h2></div>
-				<div class="third" id="advBudgetReg"></div>
-				<div class="statText"> Text </div>
-			</div>
-			<div class="genreSegment">
-				<div class="third"><h2 class="regTitle"> Comedy </h2></div>
-				<div class="third" id="comBudgetReg"></div>
-				<div class="statText"> Text </div>
-			</div>
-			<div class="genreSegment">
-				<div class="third"><h2 class="regTitle"> Documentary </h2></div>
-				<div class="third" id="docBudgetReg"></div>
-				<div class="statText"> Text </div>
-			</div>
-			<div class="genreSegment">
-				<div class="third"><h2 class="regTitle"> Drama </h2></div>
-				<div class="third" id="draBudgetReg"></div>
-				<div class="statText"> Text </div>
-			</div>
-			<div class="genreSegment">
-				<div class="third"><h2 class="regTitle"> Musical </h2></div>
-				<div class="third" id="musBudgetReg"></div>
-				<div class="statText"> Text </div>
-			</div>
-			<div class="genreSegment">
-				<div class="third"><h2 class="regTitle"> Thriller/Horror/Suspense </h2></div>
-				<div class="third" id="tshBudgetReg"></div>
-				<div class="statText"> Text </div>
-			</div>
-		</div>
-
-		<div id="part3">
 			<div id="regression">
 			<div id="regGraph"></div>
 				<div id="regButtons" style="display: inline">
 				<button type="button" id="actButton2" class="buttonToggle" onClick="ClickAction2(); return false;"> Action </button>
 				<button type="button" id="advButton2" class="buttonToggle" onClick="ClickAdventure2(); return false;"> Adventure </button>
-				<button type="button" id="animButton2" class="buttonToggle" onClick="ClickAnimation2(); return false;"> Animation </button>
 				<button type="button" id="comButton2" class="buttonToggle" onClick="ClickComedy2(); return false;"> Comedy </button>
+				<button type="button" id="docButton2" class="buttonToggle" onClick="ClickDocumentary2(); return false;"> Documentary </button>
 				<button type="button" id="draButton2" class="buttonToggle" onClick="ClickDrama2(); return false;"> Drama </button>
-				<button type="button" id="horButton2" class="buttonToggle" onClick="ClickHorror2(); return false;"> Horror </button>
-				<button type="button" id="romButton2" class="buttonToggle" onClick="ClickRomance2(); return false;"> Romance </button>
-				<button type="button" id="thrButton2" class="buttonToggle" onClick="ClickThriller2(); return false;"> Thriller </button>
+				<button type="button" id="musButton2" class="buttonToggle" onClick="ClickMusical2(); return false;"> Musical </button>
+				<button type="button" id="tshButton2" class="buttonToggle" onClick="ClickTsh2(); return false;"> Thriller/Suspense/Horror </button>
 			</div>
 		</div>
 	</div>
 
 
 	<script>
+		//size of svg canvas
 		var genreWidth = 1000,
     		genreHeight = 667,
     		padding = 90;
 
+    	//Keep track of which genres are displayed
     	var actTog = "off";
     	var advTog = "off";
     	var comTog = "off";
@@ -91,8 +53,7 @@
     	var musTog = "off";
     	var tshTog = "off";
 
-    	var genreMap, color;
-
+    	//arrays for storing genre data
     	var actArray = [];
     	var advArray = [];
     	var comArray = [];
@@ -109,24 +70,21 @@
     	musBut = document.getElementById("musButton");
     	tshBut = document.getElementById("tshButton");
 
+    	//create svg and elements
     	var svgGenre = d3.select("#genreMarket").append("svg")
     		.attr("width", genreWidth)
     		.attr("height", genreHeight);
-
+    	//scales and axis
     	var xScale = d3.scale.linear().domain([1994.5,2016]).range([padding, genreWidth-padding]);
     	var yScale = d3.scale.linear().domain([0,50]).range([genreHeight-padding, padding]);
-
     	var xAxis = d3.svg.axis().scale(xScale).orient("bottom").tickFormat(d3.format("d"));
     	var yAxis = d3.svg.axis().scale(yScale).orient("left");
-
     	svgGenre.append("g").attr("class", "axis")
 			.attr("transform", "translate(0," + yScale(0) + ")")
 			.call(xAxis).selectAll("text").attr("font-size", 12).attr("stroke", "white");
-
 		svgGenre.append("g").attr("class", "axis")
 			.attr("transform", "translate(" + xScale(1994.5) + ",0)")
 			.call(yAxis).selectAll("text").attr("font-size", 13).attr("stroke", "white");
-
 		svgGenre.append("text").text("Title").attr("x", 475).attr("y", 30).style("font-style", "arial").style("font-size", 20).style("fill", "white");
 		svgGenre.append("text").text("Year").attr("x", 475).attr("y", 635).style("font-style", "arial").style("font-size", 20).style("fill", "white");
 		svgGenre.append("text").text("% Market Share").attr("x", 2).attr("y", 250).style("font-style", "arial").style("font-size", 20)
@@ -141,12 +99,15 @@
 		
 
 		d3.csv("genreMarketShareData.csv", function(error, rows) {
+				var genreMap, color;
 				//Array to keep track of ID's of data for access later
 				genreMap = d3.map(rows, function(id) {
 					//Make ID key to object in map
 					return Number(id.ID);
 				});
 
+
+				//add data to their respective arrays
 				var coord;
 				for (var j = 0; j < genreMap.size(); j++) {
 					var thisGenre = genreMap.get(j+1).Genre;
@@ -189,7 +150,7 @@
 			});
 	
 
-
+		//functions for when a button is clicked
 		function ClickAction() {
 			//clear existing lines
 			if (actTog == "on") {
@@ -205,7 +166,7 @@
 				//create line
 				svgGenre.append("path").attr("d", makeLine(actArray))
 					.attr("stroke", color).attr("fill", "none").attr("stroke-width", 2).attr("class", "actionLine");
-					//create circles
+				//create circles
 				actArray.forEach( function (g) {
 					svgGenre.append("circle").attr("cx", xScale(g.x))
 						.attr("cy", yScale(g.y)).attr("r", 4)
@@ -373,666 +334,325 @@
 				tshTog = "on";
 			}
 		}
-
-
-
 	</script>
+
 	<script>
+	//variable names in the second part have a 2
 
-		var regHeight = 300,
-			regWidth = 500,
-			regPadding = 70;
 
-		var actPoints = [],
-			advPoints = [],
-			comPoints = [],
-			docPoints = [],
-			draPoints = [],
-			musPoints = [],
-			tshPoints = [];
-
-		var regMap;
-
-    	var svgActReg = d3.select("#actBudgetReg").append("svg")
-    		.attr("width", regWidth)
-    		.attr("height", regHeight);
-
-    	var svgAdvReg = d3.select("#advBudgetReg").append("svg")
-    		.attr("width", regWidth)
-    		.attr("height", regHeight);
-
-    	var svgComReg = d3.select("#comBudgetReg").append("svg")
-    		.attr("width", regWidth)
-    		.attr("height", regHeight);
-
-    	var svgDocReg = d3.select("#docBudgetReg").append("svg")
-    		.attr("width", regWidth)
-    		.attr("height", regHeight);
-
-    	var svgDraReg = d3.select("#draBudgetReg").append("svg")
-    		.attr("width", regWidth)
-    		.attr("height", regHeight);
-
-    	var svgMusReg = d3.select("#musBudgetReg").append("svg")
-    		.attr("width", regWidth)
-    		.attr("height", regHeight);
-
-    	var svgTshReg = d3.select("#tshBudgetReg").append("svg")
-    		.attr("width", regWidth)
-    		.attr("height", regHeight);
-
-    	var yScaleAReg = d3.scale.linear().domain([10,30]).range([regHeight-regPadding, regPadding]);
-    	var yScaleBReg = d3.scale.linear().domain([10,20]).range([regHeight-regPadding, regPadding]);
-    	var yScaleCReg = d3.scale.linear().domain([0,10]).range([regHeight-regPadding, regPadding]);
-    	var xScaleReg = d3.scale.linear().domain([0,1000]).range([regPadding, regWidth-regPadding]);
-
-    	var yAxisAReg = d3.svg.axis().scale(yScaleAReg).orient("left").tickFormat(d3.format("d"));
-    	var yAxisBReg = d3.svg.axis().scale(yScaleBReg).orient("left").tickFormat(d3.format("d"));
-    	var yAxisCReg = d3.svg.axis().scale(yScaleCReg).orient("left").tickFormat(d3.format("d"));
-    	var xAxisReg = d3.svg.axis().scale(xScaleReg).orient("bottom").tickFormat(d3.format("d"));
-
-
-    	svgActReg.append("g").attr("class", "axisReg")
-			.attr("transform", "translate(0," + yScaleAReg(10) + ")")
-			.call(xAxisReg).selectAll("text").attr("font-size", 12).attr("stroke", "white");
-
-		svgActReg.append("g").attr("class", "axisReg")
-			.attr("transform", "translate(" + xScaleReg(0) + ",0)")
-			.call(yAxisAReg).selectAll("text").attr("font-size", 12).attr("stroke", "white");
-
-
-		svgAdvReg.append("g").attr("class", "axisReg")
-			.attr("transform", "translate(0," + yScaleAReg(10) + ")")
-			.call(xAxisReg).selectAll("text").attr("font-size", 12).attr("stroke", "white");
-
-		svgAdvReg.append("g").attr("class", "axisReg")
-			.attr("transform", "translate(" + xScaleReg(0) + ",0)")
-			.call(yAxisAReg).selectAll("text").attr("font-size", 12).attr("stroke", "white");
-
-
-		svgComReg.append("g").attr("class", "axisReg")
-			.attr("transform", "translate(0," + yScaleAReg(10) + ")")
-			.call(xAxisReg).selectAll("text").attr("font-size", 12).attr("stroke", "white");
-
-		svgComReg.append("g").attr("class", "axisReg")
-			.attr("transform", "translate(" + xScaleReg(0) + ",0)")
-			.call(yAxisAReg).selectAll("text").attr("font-size", 12).attr("stroke", "white");
-
-		svgDocReg.append("g").attr("class", "axisReg")
-			.attr("transform", "translate(0," + yScaleCReg(0) + ")")
-			.call(xAxisReg).selectAll("text").attr("font-size", 12).attr("stroke", "white");
-
-		svgDocReg.append("g").attr("class", "axisReg")
-			.attr("transform", "translate(" + xScaleReg(0) + ",0)")
-			.call(yAxisCReg).selectAll("text").attr("font-size", 12).attr("stroke", "white");
-
-
-		svgDraReg.append("g").attr("class", "axisReg")
-			.attr("transform", "translate(0," + yScaleBReg(10) + ")")
-			.call(xAxisReg).selectAll("text").attr("font-size", 12).attr("stroke", "white");
-
-		svgDraReg.append("g").attr("class", "axisReg")
-			.attr("transform", "translate(" + xScaleReg(0) + ",0)")
-			.call(yAxisBReg).selectAll("text").attr("font-size", 12).attr("stroke", "white");
-
-
-		svgMusReg.append("g").attr("class", "axisReg")
-			.attr("transform", "translate(0," + yScaleCReg(0) + ")")
-			.call(xAxisReg).selectAll("text").attr("font-size", 12).attr("stroke", "white");
-
-		svgMusReg.append("g").attr("class", "axisReg")
-			.attr("transform", "translate(" + xScaleReg(0) + ",0)")
-			.call(yAxisCReg).selectAll("text").attr("font-size", 12).attr("stroke", "white");
-
-
-		svgTshReg.append("g").attr("class", "axisReg")
-			.attr("transform", "translate(0," + yScaleBReg(10) + ")")
-			.call(xAxisReg).selectAll("text").attr("font-size", 12).attr("stroke", "white");
-
-		svgTshReg.append("g").attr("class", "axisReg")
-			.attr("transform", "translate(" + xScaleReg(0) + ",0)")
-			.call(yAxisBReg).selectAll("text").attr("font-size", 12).attr("stroke", "white");
-
-
-		d3.csv("movieBudgetData.csv", function(error, rows) {
-			regMap = d3.map(rows, function(d) {
-				//Make ID key to object in map
-				return Number(d.ID);
-			});
-
-			var coord;
-				for (var k = 0; k < regMap.size(); k++) {
-					var thisGenre = regMap.get(k+1).Genre;
-					if (thisGenre == "action"){
-						coord = {'x': regMap.get(k+1).Budget, 
-						'y': regMap.get(k+1).Share};
-						actPoints.push(coord);
-					}
-					if (thisGenre == "adventure"){
-						coord = {'x': regMap.get(k+1).Budget, 
-						'y': regMap.get(k+1).Share};
-						advPoints.push(coord);
-					}
-					if (thisGenre == "comedy"){
-						coord = {'x': regMap.get(k+1).Budget, 
-						'y': regMap.get(k+1).Share};
-						comPoints.push(coord);
-					}
-					if (thisGenre == "documentary"){
-						coord = {'x': regMap.get(k+1).Budget, 
-						'y': regMap.get(k+1).Share};
-						docPoints.push(coord);
-					}
-					if (thisGenre == "drama"){
-						coord = {'x': regMap.get(k+1).Budget, 
-						'y': regMap.get(k+1).Share};
-						draPoints.push(coord);
-					}
-					if (thisGenre == "musical"){
-						coord = {'x': regMap.get(k+1).Budget, 
-						'y': regMap.get(k+1).Share};
-						musPoints.push(coord);
-					}
-					if (thisGenre == "tsh"){
-						coord = {'x': regMap.get(k+1).Budget, 
-						'y': regMap.get(k+1).Share};
-						tshPoints.push(coord);
-					}
-				}
-
-		});
-		
-		console.log(regMap);
-
-
-
-		//Inspire from Professor Mimno's notes 4/18/16
-			function leastSquares(points) {
-				var model = {};
-				// Replace this with an expression that will filter
-				// out points not in the current selection
-
-				var meanX = d3.mean(points, function (d) {
-					console.log(d);
-					return Number(d.x);
-				});
-				var meanY = d3.mean(points, function (d) { 
-					return Number(d.y);
-				});
-				model.slope = d3.sum(points, function (d) {
-					return (Number(d.x) - meanX) * (Number(d.y) - meanY);
-				});
-				model.slope /= d3.sum(points, function (d) {
-					return (Number(d.x) - meanX) * (Number(d.x) - meanX);
-				});
-				model.intercept = meanY - model.slope * meanX;
-	
-				return model;
-			}
-
-			function regClick() {
-					var actRegLine = leastSquares(actPoints);
-
-					svgActReg.append("line")
-						.attr("x1", xScaleReg(0))
-						.attr("y1", yScaleAReg(actRegLine.slope * 0 + actRegLine.intercept))
-						.attr("x2", xScaleReg(1000))
-						.attr("y2", yScaleAReg(actRegLine.slope * 1000 + actRegLine.intercept))
-						.style("stroke", "rgb(228, 26, 28)")
-						.style("stroke-width", 3)
-						.attr("class", "actRegLine");
-
-					actPoints.forEach(function (d) {
-						svgActReg.append("circle").attr("cx", xScaleReg(d.x))
-							.attr("cy", yScaleAReg(d.y)).attr("r", 4)
-							.attr("fill", "blue").attr("class", "actRegCirc");
-					})
-
-
-					var advRegLine = leastSquares(advPoints);
-			
-
-					svgAdvReg.append("line")
-						.attr("x1", xScaleReg(0))
-						.attr("y1", yScaleAReg(advRegLine.slope * 0 + advRegLine.intercept))
-						.attr("x2", xScaleReg(1000))
-						.attr("y2", yScaleAReg(advRegLine.slope * 1000 + advRegLine.intercept))
-						.style("stroke", "rgb(228, 26, 28)")
-						.style("stroke-width", 3)
-						.attr("class", "advRegLine");
-
-					advPoints.forEach(function (d) {
-						svgAdvReg.append("circle").attr("cx", xScaleReg(d.x))
-								.attr("cy", yScaleAReg(d.y)).attr("r", 4)
-								.attr("fill", "green").attr("class", "advRegCirc");
-					})
-
-
-					var comRegLine = leastSquares(comPoints);
-
-
-					svgComReg.append("line")
-						.attr("x1", xScaleReg(0))
-						.attr("y1", yScaleAReg(comRegLine.slope * 0 + comRegLine.intercept))
-						.attr("x2", xScaleReg(1000))
-						.attr("y2", yScaleAReg(comRegLine.slope * 1000 + comRegLine.intercept))
-						.style("stroke", "rgb(228, 26, 28)")
-						.style("stroke-width", 3)
-						.attr("class", "comRegLine");
-
-					comPoints.forEach(function (d) {
-						svgComReg.append("circle").attr("cx", xScaleReg(d.x))
-								.attr("cy", yScaleAReg(d.y)).attr("r", 4)
-								.attr("fill", "orange").attr("class", "comRegCirc");
-					})
-
-
-					var docRegLine = leastSquares(docPoints);
-
-					svgDocReg.append("line")
-						.attr("x1", xScaleReg(0))
-						.attr("y1", yScaleCReg(docRegLine.slope * 0 + docRegLine.intercept))
-						.attr("x2", xScaleReg(1000))
-						.attr("y2", yScaleCReg(docRegLine.slope * 1000 + docRegLine.intercept))
-						.style("stroke", "rgb(228, 26, 28)")
-						.style("stroke-width", 3)
-						.attr("class", "docRegLine");
-
-					docPoints.forEach(function (d) {
-						svgDocReg.append("circle").attr("cx", xScaleReg(d.x))
-								.attr("cy", yScaleCReg(d.y)).attr("r", 4)
-								.attr("fill", "red").attr("class", "docRegCirc");
-					})
-
-					var draRegLine = leastSquares(draPoints);
-
-					svgDraReg.append("line")
-						.attr("x1", xScaleReg(0))
-						.attr("y1", yScaleBReg(draRegLine.slope * 0 + draRegLine.intercept))
-						.attr("x2", xScaleReg(1000))
-						.attr("y2", yScaleBReg(draRegLine.slope * 1000 + draRegLine.intercept))
-						.style("stroke", "rgb(228, 26, 28)")
-						.style("stroke-width", 3)
-						.attr("class", "draRegLine");
-
-					draPoints.forEach(function (d) {
-						svgDraReg.append("circle").attr("cx", xScaleReg(d.x))
-								.attr("cy", yScaleBReg(d.y)).attr("r", 4)
-								.attr("fill", "purple").attr("class", "draRegCirc");
-					})
-
-
-
-					var musRegLine = leastSquares(musPoints);
-
-					svgMusReg.append("line")
-						.attr("x1", xScaleReg(0))
-						.attr("y1", yScaleCReg(musRegLine.slope * 0 + musRegLine.intercept))
-						.attr("x2", xScaleReg(1000))
-						.attr("y2", yScaleCReg(musRegLine.slope * 1000 + musRegLine.intercept))
-						.style("stroke", "rgb(228, 26, 28)")
-						.style("stroke-width", 3)
-						.attr("class", "musRegLine");
-
-					musPoints.forEach(function (d) {
-						svgMusReg.append("circle").attr("cx", xScaleReg(d.x))
-								.attr("cy", yScaleCReg(d.y)).attr("r", 4)
-								.attr("fill", "pink").attr("class", "musRegCirc");
-					})
-
-
-					var tshRegLine = leastSquares(tshPoints);
-
-					svgTshReg.append("line")
-						.attr("x1", xScaleReg(0))
-						.attr("y1", yScaleBReg(tshRegLine.slope * 0 + tshRegLine.intercept))
-						.attr("x2", xScaleReg(300))
-						.attr("y2", yScaleBReg(tshRegLine.slope * 1000 + tshRegLine.intercept))
-						.style("stroke", "rgb(228, 26, 28)")
-						.style("stroke-width", 3)
-						.attr("class", "tshRegLine");
-
-					tshPoints.forEach(function (d) {
-						svgTshReg.append("circle").attr("cx", xScaleReg(d.x))
-								.attr("cy", yScaleBReg(d.y)).attr("r", 4)
-								.attr("fill", "yellow").attr("class", "tshRegCirc");
-					})
-				}
-
-
-	</script>
-	<script>
-
-		var regHeight2 = 700,
-			regWidth2 = 1400;
-
-		var actPoints2 = [],
-			advPoints2 = [],
-			animPoints2 = [],
-			comPoints2 = [],
-			draPoints2 = [],
-			horPoints2 = [],
-			romPoints2 = [],
-			thrPoints2 = [];
-
+    	//Keep track of which genres are displayed
     	var actTog2 = "off";
     	var advTog2 = "off";
-    	var animTog2 = "off";
     	var comTog2 = "off";
     	var draTog2 = "off";
-    	var horTog2 = "off"; 
-    	var romTog2 = "off";
-    	var thrTog2 = "off";
+    	var musTog2 = "off"; 
+    	var docTog2 = "off";
+    	var tshTog2 = "off";
+
+    	//arrays for storing genre data
+		var actPoints2 = [],
+			advPoints2 = [],
+			comPoints2 = [],
+			draPoints2 = [],
+			musPoints2 = [],
+			docPoints2 = [],
+			tshPoints2 = [];
 
     	actBut2 = document.getElementById("actButton2");
     	advBut2 = document.getElementById("advButton2");
-    	animBut2 = document.getElementById("animButton2");
     	comBut2 = document.getElementById("comButton2");
     	draBut2 = document.getElementById("draButton2");
-    	horBut2 = document.getElementById("horButton2");
-    	romBut2 = document.getElementById("romButton2");
-    	thrBut2 = document.getElementById("thrButton2");
+    	musBut2 = document.getElementById("musButton2");
+    	docBut2 = document.getElementById("docButton2");
+    	tshBut2 = document.getElementById("tshButton2");
 
-		var regMap2;
+		//size of svg canvas
+		var regHeight2 = 700,
+			regWidth2 = 1400;
 
-		var svgReg = d3.select("#regGraph").append("svg")
+		//create svg
+		var svgReg2 = d3.select("#regGraph").append("svg")
     		.attr("width", regWidth2)
     		.attr("height", regHeight2);
 
+    	//create scales and axis
     	var xScaleReg2 = d3.scale.linear().domain([0,300]).range([padding, regWidth2-padding]);
-    	var yScaleReg2 = d3.scale.linear().domain([0,1000]).range([regHeight2-padding, padding]);
-
+    	var yScaleReg2 = d3.scale.linear().domain([0,800]).range([regHeight2-padding, padding]);
     	var xAxisReg2 = d3.svg.axis().scale(xScaleReg2).orient("bottom").tickFormat(d3.format("d"));
     	var yAxisReg = d3.svg.axis().scale(yScaleReg2).orient("left");
 
-    	svgReg.append("g").attr("class", "axisReg")
+    	svgReg2.append("g").attr("class", "axisReg")
 			.attr("transform", "translate(0," + yScaleReg2(0) + ")")
 			.call(xAxisReg2).selectAll("text").attr("font-size", 12).attr("stroke", "white");
 
-		svgReg.append("g").attr("class", "axisReg")
+		svgReg2.append("g").attr("class", "axisReg")
 			.attr("transform", "translate(" + xScaleReg2(0) + ",0)")
 			.call(yAxisReg).selectAll("text").attr("font-size", 13).attr("stroke", "white");
 
 
-		d3.csv("formattedBudgetData.csv", function(error, rows) {
+		d3.csv("formattedBudgetDataCopy.csv", function(error, rows) {
+			var regMap2;
 			regMap2 = d3.map(rows, function(d) {
 				//Make ID key to object in map
 				return Number(d.ID);
 			});
 
-
+			//add variables to their respective arrays
 			var info;
-				for (var k = 0; k < regMap2.size(); k++) {
-					var thisGenre = regMap2.get(k+1).Genre;
-					if (thisGenre == "Action"){
-						info = {'x': regMap2.get(k+1).Budget, 
-						'y': regMap2.get(k+1).Domestic,
-						'name': regMap2.get(k+1).Name,
-						'studio' : regMap2.get(k+1).Studio,
-						'rotten': regMap2.get(k+1).Rotten};
-						actPoints2.push(info);
-					}
-					if (thisGenre == "Adventure"){
-						info = {'x': regMap2.get(k+1).Budget, 
-						'y': regMap2.get(k+1).Domestic,
-						'name': regMap2.get(k+1).Name,
-						'studio' : regMap2.get(k+1).Studio,
-						'rotten': regMap2.get(k+1).Rotten};
-						advPoints2.push(info);
-					}
-					if (thisGenre == "Animation"){
-						info = {'x': regMap2.get(k+1).Budget, 
-						'y': regMap2.get(k+1).Domestic,
-						'name': regMap2.get(k+1).Name,
-						'studio' : regMap2.get(k+1).Studio,
-						'rotten': regMap2.get(k+1).Rotten};
-						animPoints2.push(info);
-					}
-					if (thisGenre == "Comedy"){
-						info = {'x': regMap2.get(k+1).Budget, 
-						'y': regMap2.get(k+1).Domestic,
-						'name': regMap2.get(k+1).Name,
-						'studio' : regMap2.get(k+1).Studio,
-						'rotten': regMap2.get(k+1).Rotten};
-						comPoints2.push(info);
-					}
-					if (thisGenre == "Drama"){
-						info = {'x': regMap2.get(k+1).Budget, 
-						'y': regMap2.get(k+1).Domestic,
-						'name': regMap2.get(k+1).Name,
-						'studio' : regMap2.get(k+1).Studio,
-						'rotten': regMap2.get(k+1).Rotten};
-						draPoints2.push(info);
-					}
-					if (thisGenre == "Horror"){
-						info = {'x': regMap2.get(k+1).Budget, 
-						'y': regMap2.get(k+1).Domestic,
-						'name': regMap2.get(k+1).Name,
-						'studio' : regMap2.get(k+1).Studio,
-						'rotten': regMap2.get(k+1).Rotten};
-						horPoints2.push(info);
-					}
-
-					if (thisGenre == "Romance"){
-						info = {'x': regMap2.get(k+1).Budget, 
-						'y': regMap2.get(k+1).Domestic,
-						'name': regMap2.get(k+1).Name,
-						'studio' : regMap2.get(k+1).Studio,
-						'rotten': regMap2.get(k+1).Rotten};
-						romPoints2.push(info);
-					}
-
-					if (thisGenre == "Thriller"){
-						info = {'x': regMap2.get(k+1).Budget, 
-						'y': regMap2.get(k+1).Domestic,
-						'name': regMap2.get(k+1).Name,
-						'studio' : regMap2.get(k+1).Studio,
-						'rotten': regMap2.get(k+1).Rotten};
-						thrPoints2.push(info);
-					}
+			for (var k = 0; k < regMap2.size(); k++) {
+				var thisGenre = regMap2.get(k+1).Genre;
+				if (thisGenre == "Action"){
+					info = {'x': regMap2.get(k+1).Budget, 
+					'y': regMap2.get(k+1).Domestic,
+					'name': regMap2.get(k+1).Name,
+					'studio' : regMap2.get(k+1).Studio,
+					'rotten': regMap2.get(k+1).Rotten};
+					actPoints2.push(info);
 				}
+				if (thisGenre == "Adventure"){
+					info = {'x': regMap2.get(k+1).Budget, 
+					'y': regMap2.get(k+1).Domestic,
+					'name': regMap2.get(k+1).Name,
+					'studio' : regMap2.get(k+1).Studio,
+					'rotten': regMap2.get(k+1).Rotten};
+					advPoints2.push(info);
+				}
+				if (thisGenre == "Animation"){
+					info = {'x': regMap2.get(k+1).Budget, 
+					'y': regMap2.get(k+1).Domestic,
+					'name': regMap2.get(k+1).Name,
+					'studio' : regMap2.get(k+1).Studio,
+					'rotten': regMap2.get(k+1).Rotten};
+					animPoints2.push(info);
+				}
+				if (thisGenre == "Comedy"){
+					info = {'x': regMap2.get(k+1).Budget, 
+					'y': regMap2.get(k+1).Domestic,
+					'name': regMap2.get(k+1).Name,
+					'studio' : regMap2.get(k+1).Studio,
+					'rotten': regMap2.get(k+1).Rotten};
+					comPoints2.push(info);
+				}
+				if (thisGenre == "Drama"){
+					info = {'x': regMap2.get(k+1).Budget, 
+					'y': regMap2.get(k+1).Domestic,
+					'name': regMap2.get(k+1).Name,
+					'studio' : regMap2.get(k+1).Studio,
+					'rotten': regMap2.get(k+1).Rotten};
+					draPoints2.push(info);
+				}
+				if (thisGenre == "Musical"){
+					info = {'x': regMap2.get(k+1).Budget, 
+					'y': regMap2.get(k+1).Domestic,
+					'name': regMap2.get(k+1).Name,
+					'studio' : regMap2.get(k+1).Studio,
+					'rotten': regMap2.get(k+1).Rotten};
+					musPoints2.push(info);
+				}
+
+				if (thisGenre == "Documentary"){
+					info = {'x': regMap2.get(k+1).Budget, 
+					'y': regMap2.get(k+1).Domestic,
+					'name': regMap2.get(k+1).Name,
+					'studio' : regMap2.get(k+1).Studio,
+					'rotten': regMap2.get(k+1).Rotten};
+					docPoints2.push(info);
+				}
+
+				if (thisGenre == "Tsh"){
+					info = {'x': regMap2.get(k+1).Budget, 
+					'y': regMap2.get(k+1).Domestic,
+					'name': regMap2.get(k+1).Name,
+					'studio' : regMap2.get(k+1).Studio,
+					'rotten': regMap2.get(k+1).Rotten};
+					tshPoints2.push(info);
+				}
+			}
 
 			//display data
 			var model;
 
 			//create action svg elements
 			actPoints2.forEach( function (d) {
-				svgReg.append("circle").attr("cx", xScaleReg2(d.x))
+				svgReg2.append("circle").attr("cx", xScaleReg2(d.x))
 				.attr("cy", yScaleReg2(d.y)).attr("r", 4)
 				.attr("class","act")
 				.attr("visibility","hidden")
-				.attr("fill","blue");
+				.attr("fill","#00CCFF");
 			});
 			model = leastSquares(actPoints2);
-			svgReg.append("line")
+			svgReg2.append("line")
 				.attr("x1", xScaleReg2(0))
 				.attr("y1", yScaleReg2(model.slope * 0 + model.intercept))
 				.attr("x2", xScaleReg2(300))
 				.attr("y2", yScaleReg2(model.slope * 300 + model.intercept))
-				.style("stroke", "blue")
+				.style("stroke", "#00CCFF")
 				.style("stroke-width", 3)
 				.attr("visibility","hidden")
 				.attr("class", "act");
 			
 			//create adventure svg elements
 			advPoints2.forEach( function (d) {
-				svgReg.append("circle").attr("cx", xScaleReg2(d.x))
+				svgReg2.append("circle").attr("cx", xScaleReg2(d.x))
 				.attr("cy", yScaleReg2(d.y)).attr("r", 4)
 				.attr("class","adv")
 				.attr("visibility","hidden")
-				.attr("fill","green");
+				.attr("fill","#9AFE2E");
 			});
 			model = leastSquares(advPoints2);
-			svgReg.append("line")
+			svgReg2.append("line")
 				.attr("x1", xScaleReg2(0))
 				.attr("y1", yScaleReg2(model.slope * 0 + model.intercept))
 				.attr("x2", xScaleReg2(300))
 				.attr("y2", yScaleReg2(model.slope * 300 + model.intercept))
-				.style("stroke", "green")
+				.style("stroke", "#9AFE2E")
 				.style("stroke-width", 3)
 				.attr("visibility","hidden")
 				.attr("class", "adv");
 
-
-			//create animation svg elements			
-			animPoints2.forEach( function (d) {
-				svgReg.append("circle").attr("cx", xScaleReg2(d.x))
-				.attr("cy", yScaleReg2(d.y)).attr("r", 4)
-				.attr("class","anim")
-				.attr("visibility","hidden")
-				.attr("fill","red");
-			});	
-			model = leastSquares(animPoints2);
-			svgReg.append("line")
-				.attr("x1", xScaleReg2(0))
-				.attr("y1", yScaleReg2(model.slope * 0 + model.intercept))
-				.attr("x2", xScaleReg2(300))
-				.attr("y2", yScaleReg2(model.slope * 300 + model.intercept))
-				.style("stroke", "red")
-				.style("stroke-width", 3)
-				.attr("visibility","hidden")
-				.attr("class", "anim");
-
 			//create comedy svg elements			
 			comPoints2.forEach( function (d) {
-				svgReg.append("circle").attr("cx", xScaleReg2(d.x))
+				svgReg2.append("circle").attr("cx", xScaleReg2(d.x))
 				.attr("cy", yScaleReg2(d.y)).attr("r", 4)
 				.attr("class","com")
 				.attr("visibility","hidden")
-				.attr("fill","orange");
+				.attr("fill","#FE9A2E");
 			});	
 			model = leastSquares(comPoints2);
-			svgReg.append("line")
+			svgReg2.append("line")
 				.attr("x1", xScaleReg2(0))
 				.attr("y1", yScaleReg2(model.slope * 0 + model.intercept))
 				.attr("x2", xScaleReg2(300))
 				.attr("y2", yScaleReg2(model.slope * 300 + model.intercept))
-				.style("stroke", "orange")
+				.style("stroke", "#FE9A2E")
 				.style("stroke-width", 3)
 				.attr("visibility","hidden")
 				.attr("class", "com");
 
 			//create drama svg elements			
 			draPoints2.forEach( function (d) {
-				svgReg.append("circle").attr("cx", xScaleReg2(d.x))
+				svgReg2.append("circle").attr("cx", xScaleReg2(d.x))
 				.attr("cy", yScaleReg2(d.y)).attr("r", 4)
 				.attr("class","dra")
 				.attr("visibility","hidden")
-				.attr("fill","purple");
+				.attr("fill","#9A2EFE");
 			});	
 			model = leastSquares(draPoints2);
-			svgReg.append("line")
+			svgReg2.append("line")
 				.attr("x1", xScaleReg2(0))
 				.attr("y1", yScaleReg2(model.slope * 0 + model.intercept))
 				.attr("x2", xScaleReg2(300))
 				.attr("y2", yScaleReg2(model.slope * 300 + model.intercept))
-				.style("stroke", "purple")
+				.style("stroke", "#9A2EFE")
 				.style("stroke-width", 3)
 				.attr("visibility","hidden")
 				.attr("class", "dra");
 
-			//create horror svg elements			
-			horPoints2.forEach( function (d) {
-				svgReg.append("circle").attr("cx", xScaleReg2(d.x))
+			//create musical svg elements			
+			musPoints2.forEach( function (d) {
+				svgReg2.append("circle").attr("cx", xScaleReg2(d.x))
 				.attr("cy", yScaleReg2(d.y)).attr("r", 4)
-				.attr("class","hor")
+				.attr("class","mus")
 				.attr("visibility","hidden")
-				.attr("fill","black");
+				.attr("fill","#FA58F4");
 			});	
-			model = leastSquares(horPoints2);
-			svgReg.append("line")
+			model = leastSquares(musPoints2);
+			svgReg2.append("line")
 				.attr("x1", xScaleReg2(0))
 				.attr("y1", yScaleReg2(model.slope * 0 + model.intercept))
 				.attr("x2", xScaleReg2(300))
 				.attr("y2", yScaleReg2(model.slope * 300 + model.intercept))
-				.style("stroke", "black")
+				.style("stroke", "#FA58F4")
 				.style("stroke-width", 3)
 				.attr("visibility","hidden")
-				.attr("class", "hor");
+				.attr("class", "mus");
 
-			//create romance svg elements			
-			romPoints2.forEach( function (d) {
-				svgReg.append("circle").attr("cx", xScaleReg2(d.x))
+			//create documentary svg elements			
+			docPoints2.forEach( function (d) {
+				svgReg2.append("circle").attr("cx", xScaleReg2(d.x))
 				.attr("cy", yScaleReg2(d.y)).attr("r", 4)
-				.attr("class","rom")
+				.attr("class","doc")
 				.attr("visibility","hidden")
-				.attr("fill","pink");
+				.attr("fill","#FE2E2E");
 			});	
-			model = leastSquares(romPoints2);
-			svgReg.append("line")
+			model = leastSquares(docPoints2);
+			svgReg2.append("line")
 				.attr("x1", xScaleReg2(0))
 				.attr("y1", yScaleReg2(model.slope * 0 + model.intercept))
 				.attr("x2", xScaleReg2(300))
 				.attr("y2", yScaleReg2(model.slope * 300 + model.intercept))
-				.style("stroke", "pink")
+				.style("stroke", "#FE2E2E")
 				.style("stroke-width", 3)
 				.attr("visibility","hidden")
-				.attr("class", "rom");
+				.attr("class", "doc");
 
-			//create thriller svg elements			
-			thrPoints2.forEach( function (d) {
-				svgReg.append("circle").attr("cx", xScaleReg2(d.x))
+			//create tsh svg elements			
+			tshPoints2.forEach( function (d) {
+				svgReg2.append("circle").attr("cx", xScaleReg2(d.x))
 				.attr("cy", yScaleReg2(d.y)).attr("r", 4)
-				.attr("class","thr")
+				.attr("class","tsh")
 				.attr("visibility","hidden")
-				.attr("fill","yellow");
+				.attr("fill","#F4FA58");
 			});	
-			model = leastSquares(thrPoints2);
-			svgReg.append("line")
+			model = leastSquares(tshPoints2);
+			svgReg2.append("line")
 				.attr("x1", xScaleReg2(0))
 				.attr("y1", yScaleReg2(model.slope * 0 + model.intercept))
 				.attr("x2", xScaleReg2(300))
 				.attr("y2", yScaleReg2(model.slope * 300 + model.intercept))
-				.style("stroke", "yellow")
+				.style("stroke", "#F4FA58")
 				.style("stroke-width", 3)
 				.attr("visibility","hidden")
-				.attr("class", "thr");						
+				.attr("class", "tsh");						
 
 		});
 
 		function ClickAction2() {
-			//clear existing lines
+			//Hide existing data
 			if (actTog2 == "on") {
-				svgReg.selectAll(".act").attr("visibility","hidden");
+				svgReg2.selectAll(".act").attr("visibility","hidden");
 				actTog2 = "off";
 				actBut2.style.backgroundColor = "#1c1c1c";
 				actBut2.style.color = "white";
 			}
+			//Display data
 			else{
-				svgReg.selectAll(".act").attr("visibility","visible");
-				actBut2.style.backgroundColor = "blue";
+				svgReg2.selectAll(".act").attr("visibility","visible");
+				actBut2.style.backgroundColor = "#00CCFF";
 				actBut2.style.color = "#1c1c1c";
 				actTog2 = "on";
 			}
 		}
 
 		function ClickAdventure2() {
-			//clear existing lines
+			//Hide existing data
 			if (advTog2 == "on") {
-				svgReg.selectAll(".adv").attr("visibility","hidden");
+				svgReg2.selectAll(".adv").attr("visibility","hidden");
 				advTog2 = "off";
 				advBut2.style.backgroundColor = "#1c1c1c";
 				advBut2.style.color = "white";
 
 			}
+			//Display data
 			else{
-				svgReg.selectAll(".adv").attr("visibility","visible");
-				advBut2.style.backgroundColor = "green";
+				svgReg2.selectAll(".adv").attr("visibility","visible");
+				advBut2.style.backgroundColor = "#9AFE2E";
 				advBut2.style.color = "#1c1c1c";
 				advTog2 = "on";
 			}
 		}
 
 		function ClickAnimation2() {
-			//clear existing lines
+			//Hide existing data
 			if (animTog2 == "on") {
-				svgReg.selectAll(".anim").attr("visibility","hidden");
+				svgReg2.selectAll(".anim").attr("visibility","hidden");
 				animTog2 = "off";
 				animBut2.style.backgroundColor = "#1c1c1c";
 				animBut2.style.color = "white";
 			}
+			//Display data
 			else{
-				svgReg.selectAll(".anim").attr("visibility","visible");
+				svgReg2.selectAll(".anim").attr("visibility","visible");
 				animBut2.style.backgroundColor = "red";
 				animBut2.style.color = "#1c1c1c";
 				animTog2 = "on";
@@ -1040,82 +660,87 @@
 		}
 
 		function ClickComedy2() {
-			//clear existing lines
+			//Hide existing data
 			if (comTog2 == "on") {
-				svgReg.selectAll(".com").attr("visibility","hidden");
+				svgReg2.selectAll(".com").attr("visibility","hidden");
 				comTog2 = "off";
 				comBut2.style.backgroundColor = "#1c1c1c";
 				comBut2.style.color = "white";
 			}
+			//Display data
 			else{
-				svgReg.selectAll(".com").attr("visibility","visible");
-				comBut2.style.backgroundColor = "orange";
+				svgReg2.selectAll(".com").attr("visibility","visible");
+				comBut2.style.backgroundColor = "#FE9A2E";
 				comBut2.style.color = "#1c1c1c";
 				comTog2 = "on";
 			}
 		}
 
 		function ClickDrama2() {
-			//clear existing lines
+			//Hide existing data
 			if (draTog2 == "on") {
-				svgReg.selectAll(".dra").attr("visibility","hidden");
+				svgReg2.selectAll(".dra").attr("visibility","hidden");
 				draTog2 = "off";
 				draBut2.style.backgroundColor = "#1c1c1c";
 				draBut2.style.color = "white";
 			}
+			//Display data
 			else{
-				svgReg.selectAll(".dra").attr("visibility","visible");
-				draBut2.style.backgroundColor = "purple";
+				svgReg2.selectAll(".dra").attr("visibility","visible");
+				draBut2.style.backgroundColor = "#9A2EFE";
 				draBut2.style.color = "#1c1c1c";
 				draTog2 = "on";
 			}
 		}
 
-		function ClickHorror2() {
-			//clear existing lines
-			if (horTog2 == "on") {
-				svgReg.selectAll(".hor").attr("visibility","hidden");
-				horTog2 = "off";
-				horBut2.style.backgroundColor = "#1c1c1c";
-				horBut2.style.color = "white";
+		function ClickMusical2() {
+			//Hide existing data
+			if (musTog2 == "on") {
+				svgReg2.selectAll(".mus").attr("visibility","hidden");
+				musTog2 = "off";
+				musBut2.style.backgroundColor = "#1c1c1c";
+				musBut2.style.color = "white";
 			}
+			//Display data
 			else{
-				svgReg.selectAll(".hor").attr("visibility","visible");
-				horBut2.style.backgroundColor = "black";
-				horBut2.style.color = "#1c1c1c";
-				horTog2 = "on";
+				svgReg2.selectAll(".mus").attr("visibility","visible");
+				musBut2.style.backgroundColor = "#FA58F4";
+				musBut2.style.color = "#1c1c1c";
+				musTog2 = "on";
 			}
 		}
 
-		function ClickRomance2() {
-			//clear existing lines
-			if (romTog2 == "on") {
-				svgReg.selectAll(".rom").attr("visibility","hidden");
-				romTog2 = "off";
-				romBut2.style.backgroundColor = "#1c1c1c";
-				romBut2.style.color = "white";
+		function ClickDocumentary2() {
+			//Hide existing data
+			if (docTog2 == "on") {
+				svgReg2.selectAll(".doc").attr("visibility","hidden");
+				docTog2 = "off";
+				docBut2.style.backgroundColor = "#1c1c1c";
+				docBut2.style.color = "white";
 			}
+			//Display data
 			else{
-				svgReg.selectAll(".rom").attr("visibility","visible");
-				romBut2.style.backgroundColor = "red";
-				romBut2.style.color = "#1c1c1c";
-				romTog2 = "on";
+				svgReg2.selectAll(".doc").attr("visibility","visible");
+				docBut2.style.backgroundColor = "#FE2E2E";
+				docBut2.style.color = "#1c1c1c";
+				docTog2 = "on";
 			}
 		}
 
-		function ClickThriller2() {
-			//clear existing lines
-			if (thrTog2 == "on") {
-				svgReg.selectAll(".thr").attr("visibility","hidden");
-				thrTog2 = "off";
-				thrBut2.style.backgroundColor = "#1c1c1c";
-				thrBut2.style.color = "white";
+		function ClickTsh2() {
+			//Hide existing data
+			if (tshTog2 == "on") {
+				svgReg2.selectAll(".tsh").attr("visibility","hidden");
+				tshTog2 = "off";
+				tshBut2.style.backgroundColor = "#1c1c1c";
+				tshBut2.style.color = "white";
 			}
+			//Display data
 			else{
-				svgReg.selectAll(".thr").attr("visibility","visible");
-				thrBut2.style.backgroundColor = "yellow";
-				thrBut2.style.color = "#1c1c1c";
-				thrTog2 = "on";
+				svgReg2.selectAll(".tsh").attr("visibility","visible");
+				tshBut2.style.backgroundColor = "#F4FA58";
+				tshBut2.style.color = "#1c1c1c";
+				tshTog2 = "on";
 			}
 		}
 					
