@@ -19,6 +19,7 @@ rect{
 
 
 <script>
+var yearArray, current_year;
 
  d3.csv("fakecsv.csv", function(error, rows) {
 
@@ -300,7 +301,18 @@ rect{
         }
         
         this.bP = bP;
-    }();
+    }
+    ();
+
+    //Array to keep track of ID's of data for access later
+    var genreMap = d3.map(rows, function(id) {
+        //Make ID key to object in map
+                    return Number(id.ID);
+        });
+
+
+
+
 
 //avgbudget is next year's budget
         var actArray = [];
@@ -311,13 +323,9 @@ rect{
         var musArray = [];
         var tshArray = [];
         var newarray = [];
-        var yearArray = [];
+        yearArray = [];
 
-                //Array to keep track of ID's of data for access later
-                genreMap = d3.map(rows, function(id) {
-                    //Make ID key to object in map
-                    return Number(id.ID);
-                });
+                
 
                 //Added in two new arrays: newarray and yearArray
                 //newarray has the information except the years because it parses in the format: [['','','']., ['','',''],..]
@@ -416,33 +424,10 @@ rect{
                     }
                 }
 
+});
+         current_year = 2006;
 
-         var current_year = 2006;
-
-        function leftclick() {
-            // if (current_year == 2006) {
-            //     document.getElementById('left_button').disabled = true;
-            // }
-            // else {
-                document.getElementById('right_button').disabled = false;
-                current_year = current_year - 1;
-                return current_year;
-
-            // }
-
-        }
-
-        function rightclick() {
-            // if (current_year == 2012) {
-            //     document.getElementById('right_button').disabled = true;
-            // } 
-            // else {
-                document.getElementById('right_button').disabled = false;
-                current_year +=1;
-                console.log(current_year);
-                return current_year;
-            // }
-        }
+        
 
 
         console.log(current_year);
@@ -468,7 +453,10 @@ rect{
                     console.log(newYearArray);
 
                 }
-        choose_data();
+
+        function run(){
+            d3.select("svg").remove();
+            choose_data();
 
 
 
@@ -481,6 +469,7 @@ rect{
 
         var svg = d3.select("body")
             .append("svg").attr('width',width).attr('height',(height+margin.b+margin.t))
+            .attr("class","thirdVis")
             .append("g").attr("transform","translate("+ margin.l+","+margin.t+")");
 
         var data = [ 
@@ -489,13 +478,37 @@ rect{
 
         bP.draw(data, svg);
 
+    }
 
-            });
+        function leftclick() {
+            // if (current_year == 2006) {
+            //     document.getElementById('left_button').disabled = true;
+            // }
+            // else {
+                document.getElementById('right_button').disabled = false;
+                current_year = current_year - 1;
+                run();
+
+            // }
+
+        }
+
+        function rightclick() {
+            // if (current_year == 2012) {
+            //     document.getElementById('right_button').disabled = true;
+            // } 
+            // else {
+                document.getElementById('right_button').disabled = false;
+                current_year +=1;
+                console.log(current_year);
+                run();
+            // }
+        }
 
 
 </script>
 
-<button id= 'left_button' onclick="leftclick()"> Left </button>
-    <button id= 'right_button' onclick="rightclick()"> Right </button>
+<button id= 'left_button' onclick="leftclick(); return false;"> Left </button>
+    <button id= 'right_button' onclick="rightclick(); return false;"> Right </button>
 	</body>
 </html>
