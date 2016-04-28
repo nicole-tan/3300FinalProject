@@ -423,14 +423,11 @@ var yearArray, current_year;
 
                     }
                 }
+                current_year = 2006;
+                run();
 
 });
-         current_year = 2006;
 
-        
-
-
-        console.log(current_year);
          var newYearArray = [];
 
 
@@ -485,8 +482,10 @@ var yearArray, current_year;
             //     document.getElementById('left_button').disabled = true;
             // }
             // else {
+                 console.log('registering left click');
                 document.getElementById('right_button').disabled = false;
                 current_year = current_year - 1;
+                console.log(current_year);
                 run();
 
             // }
@@ -505,6 +504,8 @@ var yearArray, current_year;
             // }
         }
 
+
+        //run();
 
 </script>
 
