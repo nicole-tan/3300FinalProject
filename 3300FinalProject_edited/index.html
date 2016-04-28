@@ -338,7 +338,8 @@ var yearArray, current_year;
                         coord = {'x': genreMap.get(j+1).Year, 
                         'y': genreMap.get(j+1).AvgBudget,
                         'z': genreMap.get(j+1).Share,
-                        'a': thisGenre};
+                        'a': thisGenre,
+                        'b': genreMap.get(j+1).BudgetShare};
                         
                         newarray.push([genreMap.get(j+1).Genre,
                         genreMap.get(j+1).AvgBudget, genreMap.get(j+1).Share]);
@@ -351,7 +352,8 @@ var yearArray, current_year;
                         coord = {'x': genreMap.get(j+1).Year, 
                         'y': genreMap.get(j+1).AvgBudget,
                         'z': genreMap.get(j+1).Share,
-                        'a': thisGenre};
+                        'a': thisGenre,
+                        'b': genreMap.get(j+1).BudgetShare};
                         newarray.push([genreMap.get(j+1).Genre,
                         genreMap.get(j+1).AvgBudget, genreMap.get(j+1).Share]);
 
@@ -363,7 +365,8 @@ var yearArray, current_year;
                         coord = {'x': genreMap.get(j+1).Year, 
                         'y': genreMap.get(j+1).AvgBudget,
                         'z': genreMap.get(j+1).Share,
-                        'a': thisGenre};
+                        'a': thisGenre,
+                        'b': genreMap.get(j+1).BudgetShare};
                         
                         newarray.push([genreMap.get(j+1).Genre,
                         genreMap.get(j+1).AvgBudget, genreMap.get(j+1).Share]);
@@ -376,7 +379,8 @@ var yearArray, current_year;
                         coord = {'x': genreMap.get(j+1).Year, 
                         'y': genreMap.get(j+1).AvgBudget,
                         'z': genreMap.get(j+1).Share,
-                        'a': thisGenre};
+                        'a': thisGenre,
+                        'b': genreMap.get(j+1).BudgetShare};
                         
                         newarray.push([genreMap.get(j+1).Genre,
                         genreMap.get(j+1).AvgBudget, genreMap.get(j+1).Share]);
@@ -389,7 +393,8 @@ var yearArray, current_year;
                         coord = {'x': genreMap.get(j+1).Year, 
                         'y': genreMap.get(j+1).AvgBudget,
                         'z': genreMap.get(j+1).Share,
-                        'a': thisGenre};
+                        'a': thisGenre,
+                        'b': genreMap.get(j+1).BudgetShare};
                         
                         newarray.push([genreMap.get(j+1).Genre,
                         genreMap.get(j+1).AvgBudget, genreMap.get(j+1).Share]);
@@ -402,7 +407,8 @@ var yearArray, current_year;
                         coord = {'x': genreMap.get(j+1).Year, 
                         'y': genreMap.get(j+1).AvgBudget,
                         'z': genreMap.get(j+1).Share,
-                        'a': thisGenre};
+                        'a': thisGenre,
+                        'b': genreMap.get(j+1).BudgetShare};
                         
                         newarray.push([genreMap.get(j+1).Genre,
                         genreMap.get(j+1).AvgBudget, genreMap.get(j+1).Share]);
@@ -414,7 +420,8 @@ var yearArray, current_year;
                         coord = {'x': genreMap.get(j+1).Year, 
                         'y': genreMap.get(j+1).AvgBudget,
                         'z': genreMap.get(j+1).Share,
-                        'a': thisGenre};
+                        'a': thisGenre,
+                        'b': genreMap.get(j+1).BudgetShare};
                         
                         newarray.push([genreMap.get(j+1).Genre,
                         genreMap.get(j+1).AvgBudget, genreMap.get(j+1).Share]);
@@ -444,7 +451,7 @@ var yearArray, current_year;
 
                         if (yearArray[i].x == current_year) {
 
-                        //format = [Genre, Share, Budget]
+                        //format = [Genre, Share, Budget, BudgetShare]
                         tempArray = [yearArray[i].a, yearArray[i].y, yearArray[i].z];
                         newYearArray.push(tempArray);
                         }
