@@ -100,8 +100,8 @@ svg {
 
 /**doesn't work*/
 .adventureLine {
-   stroke-dasharray: 1250;
-  stroke-dashoffset: 1200;
+   stroke-dasharray: 1550;
+  stroke-dashoffset: 1300;
   animation: dash 1s linear forwards;
 }
 
