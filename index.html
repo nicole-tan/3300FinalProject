@@ -7,6 +7,12 @@
 <body>
 	<div id="container">
 		<h1 id="title">Comparing Movie Genres </h1>
+		<div class = "div_descriptions"> 
+			<p class = 'description_font'> The graph below is a multi-line that graphs the percentage of the market for each given genre
+				(otherwise known as the market share!) versus time. Clicking on the buttons to the right shows
+				each individual genre and allows the user to compare the respective market shares against each other. 
+			</p>
+		</div>
 		<div id="part1">
 			<div id="genreMarket">
 			</div>
@@ -20,6 +26,12 @@
 				<button type="button" id="musButton" class="buttonToggle" onClick="ClickMusical(); return false;"> Musical </button>
 				<button type="button" id="tshButton" class="buttonToggle" onClick="ClickTSH(); return false;"> Thriller/Suspense/Horror </button>
 			</div>
+		</div>
+
+		<div id = "div_description_2">
+			<p class = 'description_font'> The second graph, shown below, compares the budget of a large quantity of individual movies with their domestic revenue in millions. As in the graph prior, these are divided up by genre and the resulting regression line represents the relative profitability of the genre (for example, 'Adventure'
+				has the steepest slope which indicates that it is the most profitable genre). 
+			</p> 
 		</div>
 
 		<div id="part2">
@@ -37,6 +49,15 @@
 		</div>
 	</div>
 
+	<div id = "div_description_3">
+		<p class = 'description_font'> Our final graph displays the market share for a given year for each genre
+		as well as the average budget share of the following year. The buttons to the right allow the user 
+		to change the year's worth of information displayed on the screen. 
+		As for the graph itself, a white bar longer than a colored bar indicates
+		that the proportion of that genre's budget is greater than that genre's proportional market share. In 
+		the opposite scenario, having a colored bar that is longer than its corresponding white bar would show
+		that the proportion of that genre's market share is less than the proportion of its budget. </p>
+	</div>
 	<div id="part3">
 		<div id="barChart">
 		</div>
@@ -521,11 +542,11 @@
 				.attr("fill","#00CCFF")
 				.on("mouseover", function(){
 					div.transition().duration(200).style("opacity", .9);
-					div.html("Name: " + d.name + "<br/>" +
-						"Studio: " + d.studio + "<br/>"+ 
-						"Rotten Tomato Score: " + d.rotten + "<br/>" +
-						"Domestic Revenue: " + d.y + "<br/>" + 
-						"Budget: " + d.x)
+					div.html("<strong> Name: </strong>" + d.name + "<br/>" +
+						"<strong> Studio: </strong>" + d.studio + "<br/>"+ 
+						"<strong> Rotten Tomato Score: </strong>" + d.rotten + "<br/>" +
+						"<strong> Domestic Revenue: </strong>" + d.y + "<br/>" + 
+						"<strong> Budget: </strong>" + d.x)
 						.style("left", (d3.event.pageX) + "px")
 						.style("top", (d3.event.pageY - 28) + "px");
 
@@ -556,11 +577,11 @@
 				.attr("fill","#9AFE2E")
 				.on("mouseover", function(){
 					div.transition().duration(200).style("opacity", .9);
-					div.html("Name: " + d.name + "<br/>" +
-						"Studio: " + d.studio + "<br/>"+ 
-						"Rotten Tomato Score: " + d.rotten + "<br/>" +
-						"Domestic Revenue: " + d.y + "<br/>" + 
-						"Budget: " + d.x)
+					div.html("<strong> Name: </strong>" + d.name + "<br/>" +
+						"<strong> Studio: </strong>" + d.studio + "<br/>"+ 
+						"<strong> Rotten Tomato Score: </strong> " + d.rotten + "<br/>" +
+						"<strong> Domestic Revenue: </strong>" + d.y + "<br/>" + 
+						"<strong> Budget: </strong>" + d.x)
 						.style("left", (d3.event.pageX) + "px")
 						.style("top", (d3.event.pageY - 28) + "px");
 
@@ -591,11 +612,11 @@
 				.attr("fill","#FE9A2E")
 				.on("mouseover", function(){
 					div.transition().duration(200).style("opacity", .9);
-					div.html("Name: " + d.name + "<br/>" +
-						"Studio: " + d.studio + "<br/>"+ 
-						"Rotten Tomato Score: " + d.rotten + "<br/>" +
-						"Domestic Revenue: " + d.y + "<br/>" + 
-						"Budget: " + d.x)
+					div.html("<strong> Name: </strong>" + d.name + "<br/>" +
+						"<strong> Studio: </strong>" + d.studio + "<br/>"+ 
+						"<strong> Rotten Tomato Score: </strong> " + d.rotten + "<br/>" +
+						"<strong> Domestic Revenue: </strong>" + d.y + "<br/>" + 
+						"<strong> Budget: </strong>" + d.x)
 						.style("left", (d3.event.pageX) + "px")
 						.style("top", (d3.event.pageY - 28) + "px");
 
@@ -626,11 +647,11 @@
 				.attr("fill","#9A2EFE")
 				.on("mouseover", function(){
 					div.transition().duration(200).style("opacity", .9);
-					div.html("Name: " + d.name + "<br/>" +
-						"Studio: " + d.studio + "<br/>"+ 
-						"Rotten Tomato Score: " + d.rotten + "<br/>" +
-						"Domestic Revenue: " + d.y + "<br/>" + 
-						"Budget: " + d.x)
+					div.html("<strong> Name: </strong>" + d.name + "<br/>" +
+						"<strong> Studio: </strong>" + d.studio + "<br/>"+ 
+						"<strong> Rotten Tomato Score: </strong>" + d.rotten + "<br/>" +
+						"<strong> Domestic Revenue: </strong>" + d.y + "<br/>" + 
+						"<strong> Budget: </strong>" + d.x)
 						.style("left", (d3.event.pageX) + "px")
 						.style("top", (d3.event.pageY - 28) + "px");
 
@@ -661,11 +682,11 @@
 				.attr("fill","#FA58F4")
 				.on("mouseover", function(){
 					div.transition().duration(200).style("opacity", .9);
-					div.html("Name: " + d.name + "<br/>" +
-						"Studio: " + d.studio + "<br/>"+ 
-						"Rotten Tomato Score: " + d.rotten + "<br/>" +
-						"Domestic Revenue: " + d.y + "<br/>" + 
-						"Budget: " + d.x)
+					div.html("<strong> Name: </strong>" + d.name + "<br/>" +
+						"<strong> Studio: </strong>" + d.studio + "<br/>"+ 
+						"<strong> Rotten Tomato Score: </strong>" + d.rotten + "<br/>" +
+						"<strong> Domestic Revenue: </strong>" + d.y + "<br/>" + 
+						"<strong> Budget: </strong>" + d.x)
 						.style("left", (d3.event.pageX) + "px")
 						.style("top", (d3.event.pageY - 28) + "px");
 
@@ -696,11 +717,11 @@
 				.attr("fill","#FE2E2E")
 				.on("mouseover", function(){
 					div.transition().duration(200).style("opacity", .9);
-					div.html("Name: " + d.name + "<br/>" +
-						"Studio: " + d.studio + "<br/>"+ 
-						"Rotten Tomato Score: " + d.rotten + "<br/>" +
-						"Domestic Revenue: " + d.y + "<br/>" + 
-						"Budget: " + d.x)
+					div.html("<strong> Name: </strong>" + d.name + "<br/>" +
+						"<strong> Studio: </strong>" + d.studio + "<br/>"+ 
+						"<strong> Rotten Tomato Score: </strong>" + d.rotten + "<br/>" +
+						"<strong> Domestic Revenue: </strong>" + d.y + "<br/>" + 
+						"<strong> Budget: </strong>" + d.x)
 						.style("left", (d3.event.pageX) + "px")
 						.style("top", (d3.event.pageY - 28) + "px");
 
@@ -731,11 +752,11 @@
 				.attr("fill","#F4FA58")
 				.on("mouseover", function(){
 					div.transition().duration(200).style("opacity", .9);
-					div.html("Name: " + d.name + "<br/>" +
-						"Studio: " + d.studio + "<br/>"+ 
-						"Rotten Tomato Score: " + d.rotten + "<br/>" +
-						"Domestic Revenue: " + d.y + "<br/>" + 
-						"Budget: " + d.x)
+					div.html("<strong> Name: </strong>" + d.name + "<br/>" +
+						"<strong> Studio: </strong>" + d.studio + "<br/>"+ 
+						"<strong> Rotten Tomato Score: </strong>" + d.rotten + "<br/>" +
+						"<strong> Domestic Revenue: </strong>" + d.y + "<br/>" + 
+						"<strong> Budget: </strong>" + d.x)
 						.style("left", (d3.event.pageX) + "px")
 						.style("top", (d3.event.pageY - 28) + "px");
 
