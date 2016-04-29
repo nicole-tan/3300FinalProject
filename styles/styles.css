@@ -31,9 +31,11 @@ svg {
 }
 #part1 {
 	margin-bottom: 10px;
+	width:1300px;
 }
 #part2 {
 	margin-top: 750px;
+	width:1300px;
 }
 #genreMarket {
 	float: left;
@@ -41,7 +43,20 @@ svg {
 	margin-top: 20px;
 	margin-bottom: 20px;
 }
+
+#regGraph {
+	float: left;
+	width: 1100px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
 #form {
+	float: left;
+	width: 180px;
+	margin-left: 20px;
+	margin-top: 80px;
+}
+#regButtons {
 	float: left;
 	width: 180px;
 	margin-left: 20px;
@@ -135,6 +150,19 @@ svg {
   animation: dash 1s linear forwards;
 }
 
+
+div.tooltip {	
+    position: absolute;			
+    text-align: center;			
+    width: 200px;					
+    height: 100px;					
+    padding: 2px;				
+    font: 12px sans-serif;		
+    background: lightsteelblue;	
+    border: 0px;		
+    border-radius: 8px;			
+    pointer-events: none;			
+}
 
 
 @keyframes dash {
