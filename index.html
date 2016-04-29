@@ -1060,15 +1060,31 @@
 					document.getElementById("rightBarButton").disabled = false;
 					svgBar.selectAll("rect.barRect").remove();
 					barYear -= 1;
-					if (barYear == 0) { document.getElementById("barYearDiv").innerText = "Budget 2007, Market-Share 2006"}
-					if (barYear == 1) { document.getElementById("barYearDiv").innerText = "Budget 2008, Market-Share 2007"}
-					if (barYear == 2) { document.getElementById("barYearDiv").innerText = "Budget 2009, Market-Share 2008"}
-					if (barYear == 3) { document.getElementById("barYearDiv").innerText = "Budget 2010, Market-Share 2009"}
-					if (barYear == 4) { document.getElementById("barYearDiv").innerText = "Budget 2011, Market-Share 2010"}
-					if (barYear == 5) { document.getElementById("barYearDiv").innerText = "Budget 2012, Market-Share 2011"}
-					if (barYear == 6) { document.getElementById("barYearDiv").innerText = "Budget 2013, Market-Share 2012"}
+					if (barYear == 0) { 
+						document.getElementById("barYearDiv").innerText = "Budget 2007, Market-Share 2006";
+					}
+					if (barYear == 1) { 
+						document.getElementById("barYearDiv").innerText = "Budget 2008, Market-Share 2007";
+					}
+					if (barYear == 2) { 
+						document.getElementById("barYearDiv").innerText = "Budget 2009, Market-Share 2008";
+					}
+					if (barYear == 3) { 
+						document.getElementById("barYearDiv").innerText = "Budget 2010, Market-Share 2009";
+					}
+					if (barYear == 4) { 
+						document.getElementById("barYearDiv").innerText = "Budget 2011, Market-Share 2010";
+					}
+					if (barYear == 5) { 
+						document.getElementById("barYearDiv").innerText = "Budget 2012, Market-Share 2011";
+					}
+					if (barYear == 6) {
+						document.getElementById("barYearDiv").innerText = "Budget 2013, Market-Share 2012";
+					}
 					plotBar(barYear);
-					if (barYear == 0) { document.getElementById("leftBarButton").disabled = true;}
+					if (barYear == 0) { 
+						document.getElementById("leftBarButton").setAttribute("disabled","disabled");
+					} 
 				}
 
 			}
@@ -1079,15 +1095,31 @@
 					document.getElementById("leftBarButton").disabled = false;
 					svgBar.selectAll("rect.barRect").remove();
 					barYear += 1;
-					if (barYear == 0) { document.getElementById("barYearDiv").innerText = "Budget 2007, Market-Share 2006"}
-					if (barYear == 1) { document.getElementById("barYearDiv").innerText = "Budget 2008, Market-Share 2007"}
-					if (barYear == 2) { document.getElementById("barYearDiv").innerText = "Budget 2009, Market-Share 2008"}
-					if (barYear == 3) { document.getElementById("barYearDiv").innerText = "Budget 2010, Market-Share 2009"}
-					if (barYear == 4) { document.getElementById("barYearDiv").innerText = "Budget 2011, Market-Share 2010"}
-					if (barYear == 5) { document.getElementById("barYearDiv").innerText = "Budget 2012, Market-Share 2011"}
-					if (barYear == 6) { document.getElementById("barYearDiv").innerText = "Budget 2013, Market-Share 2012"}
+					if (barYear == 0) {
+					 document.getElementById("barYearDiv").innerText = "Budget 2007, Market-Share 2006";
+					}
+					if (barYear == 1) { 
+						document.getElementById("barYearDiv").innerText = "Budget 2008, Market-Share 2007";
+					}
+					if (barYear == 2) { 
+						document.getElementById("barYearDiv").innerText = "Budget 2009, Market-Share 2008";
+					}
+					if (barYear == 3) { 
+						document.getElementById("barYearDiv").innerText = "Budget 2010, Market-Share 2009";
+					}
+					if (barYear == 4) { 
+						document.getElementById("barYearDiv").innerText = "Budget 2011, Market-Share 2010";
+					}
+					if (barYear == 5) { 
+						document.getElementById("barYearDiv").innerText = "Budget 2012, Market-Share 2011";
+					}
+					if (barYear == 6) { 
+						document.getElementById("barYearDiv").innerText = "Budget 2013, Market-Share 2012";
+					}
 					plotBar(barYear);
-					if (barYear==6) { document.getElementById("rightBarButton").disabled = true;}
+					if (barYear==6) { 
+						document.getElementById("rightBarButton").setAttribute("disabled","disabled");
+					}
 				}
 
 			}
