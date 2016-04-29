@@ -70,6 +70,10 @@
     	musBut = document.getElementById("musButton");
     	tshBut = document.getElementById("tshButton");
 
+
+		var div = d3.select("body").append("div")	
+    		.attr("class", "tooltip")				
+    		.style("opacity", 0);
     	//create svg and elements
     	var svgGenre = d3.select("#genreMarket").append("svg")
     		.attr("width", genreWidth)
@@ -168,9 +172,25 @@
 					.attr("stroke", color).attr("fill", "none").attr("stroke-width", 2).attr("class", "actionLine");
 				//create circles
 				actArray.forEach( function (g) {
-					svgGenre.append("circle").attr("cx", xScale(g.x))
-						.attr("cy", yScale(g.y)).attr("r", 4)
-						.attr("fill", color).attr("class", "actionCirc");
+					svgGenre.append("circle")
+						.attr("cx", xScale(g.x))
+						.attr("cy", yScale(g.y))
+						.attr("r", 4)
+						.attr("fill", color)
+						.attr("class", "actionCirc")
+						.on("mouseover", function() {
+							div.transition()
+								.duration(200)
+								.style("opacity", .9)
+							div.html(g.x)
+								.style("left", (d3.event.pageX) + "px")
+								.style("top", (d3.event.pageY - 28) + "px");
+						})
+						.on("mouseout", function() {
+							div.transition()
+								.duration(500)
+								.style("opacity", 0);
+						})
 				});
 				actBut.style.backgroundColor = color;
 				actBut.style.color = "#1c1c1c";
@@ -334,6 +354,8 @@
 				tshTog = "on";
 			}
 		}
+
+
 	</script>
 
 	<script>
