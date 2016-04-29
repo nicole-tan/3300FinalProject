@@ -6,7 +6,7 @@
 </head>
 <body>
 	<div id="container">
-		<h1 id="title"> Movie Genres </h1>
+		<h1 id="title">Comparing Movie Genres </h1>
 		<div id="part1">
 			<div id="genreMarket">
 			</div>
@@ -25,7 +25,7 @@
 		<div id="part2">
 			<div id="regression">
 			<div id="regGraph"></div>
-				<div id="regButtons" style="display: inline">
+				<div id="regButtons">
 				<button type="button" id="actButton2" class="buttonToggle" onClick="ClickAction2(); return false;"> Action </button>
 				<button type="button" id="advButton2" class="buttonToggle" onClick="ClickAdventure2(); return false;"> Adventure </button>
 				<button type="button" id="comButton2" class="buttonToggle" onClick="ClickComedy2(); return false;"> Comedy </button>
@@ -34,6 +34,17 @@
 				<button type="button" id="musButton2" class="buttonToggle" onClick="ClickMusical2(); return false;"> Musical </button>
 				<button type="button" id="tshButton2" class="buttonToggle" onClick="ClickTsh2(); return false;"> Thriller/Suspense/Horror </button>
 			</div>
+		</div>
+	</div>
+
+	<div id="part3">
+		<div id="barChart">
+		</div>
+		<div id="barButtons">
+			<button type="button" id="rightBarButton" onClick="rightBar(); return false;">Next Year</button>
+			<div id="barYearDiv">Budget 2007, Market-Share 2006</div>
+			<button type="button" id="leftBarButton" onClick="leftBar(); return false;">Prev. Year</button>
+			
 		</div>
 	</div>
 
@@ -89,7 +100,6 @@
 		svgGenre.append("g").attr("class", "axis")
 			.attr("transform", "translate(" + xScale(1994.5) + ",0)")
 			.call(yAxis).selectAll("text").attr("font-size", 13).attr("stroke", "white");
-		svgGenre.append("text").text("Title").attr("x", 475).attr("y", 30).style("font-style", "arial").style("font-size", 20).style("fill", "white");
 		svgGenre.append("text").text("Year").attr("x", 475).attr("y", 635).style("font-style", "arial").style("font-size", 20).style("fill", "white");
 		svgGenre.append("text").text("% Market Share").attr("x", 2).attr("y", 250).style("font-style", "arial").style("font-size", 20)
 			.attr("transform", "rotate(270 80 310)").style("fill","white");
@@ -388,9 +398,12 @@
     	docBut2 = document.getElementById("docButton2");
     	tshBut2 = document.getElementById("tshButton2");
 
+    	var div = d3.select("body").append("div")	
+    		.attr("class", "tooltip")				
+    		.style("opacity", 0);
 		//size of svg canvas
 		var regHeight2 = 700,
-			regWidth2 = 1400;
+			regWidth2 = 1000;
 
 		//create svg
 		var svgReg2 = d3.select("#regGraph").append("svg")
@@ -410,6 +423,11 @@
 		svgReg2.append("g").attr("class", "axisReg")
 			.attr("transform", "translate(" + xScaleReg2(0) + ",0)")
 			.call(yAxisReg).selectAll("text").attr("font-size", 13).attr("stroke", "white");
+		svgReg2.append("text").text("Domestic Revenue in millions").attr("x", 20).attr("y", 350).style("font-style", "arial").style("font-size", 20)
+			.attr("transform", "rotate(270 20 350)").style("fill","white")
+			.attr("text-anchor","middle")
+			.attr("dominant-baseline","central");
+		svgReg2.append("text").text("Budget in millions").attr("x", 400).attr("y", 670).style("font-style", "arial").style("font-size", 20).style("fill", "white");
 
 
 		d3.csv("formattedBudgetDataCopy.csv", function(error, rows) {
@@ -500,7 +518,23 @@
 				.attr("cy", yScaleReg2(d.y)).attr("r", 4)
 				.attr("class","act")
 				.attr("visibility","hidden")
-				.attr("fill","#00CCFF");
+				.attr("fill","#00CCFF")
+				.on("mouseover", function(){
+					div.transition().duration(200).style("opacity", .9);
+					div.html("Name: " + d.name + "<br/>" +
+						"Studio: " + d.studio + "<br/>"+ 
+						"Rotten Tomato Score: " + d.rotten + "<br/>" +
+						"Domestic Revenue: " + d.y + "<br/>" + 
+						"Budget: " + d.x)
+						.style("left", (d3.event.pageX) + "px")
+						.style("top", (d3.event.pageY - 28) + "px");
+
+					})
+				.on("mouseout", function(){
+					div.transition()
+						.duration(500)
+						.style("opacity",0);
+				});
 			});
 			model = leastSquares(actPoints2);
 			svgReg2.append("line")
@@ -519,7 +553,23 @@
 				.attr("cy", yScaleReg2(d.y)).attr("r", 4)
 				.attr("class","adv")
 				.attr("visibility","hidden")
-				.attr("fill","#9AFE2E");
+				.attr("fill","#9AFE2E")
+				.on("mouseover", function(){
+					div.transition().duration(200).style("opacity", .9);
+					div.html("Name: " + d.name + "<br/>" +
+						"Studio: " + d.studio + "<br/>"+ 
+						"Rotten Tomato Score: " + d.rotten + "<br/>" +
+						"Domestic Revenue: " + d.y + "<br/>" + 
+						"Budget: " + d.x)
+						.style("left", (d3.event.pageX) + "px")
+						.style("top", (d3.event.pageY - 28) + "px");
+
+					})
+				.on("mouseout", function(){
+					div.transition()
+						.duration(500)
+						.style("opacity",0);
+				});
 			});
 			model = leastSquares(advPoints2);
 			svgReg2.append("line")
@@ -538,7 +588,23 @@
 				.attr("cy", yScaleReg2(d.y)).attr("r", 4)
 				.attr("class","com")
 				.attr("visibility","hidden")
-				.attr("fill","#FE9A2E");
+				.attr("fill","#FE9A2E")
+				.on("mouseover", function(){
+					div.transition().duration(200).style("opacity", .9);
+					div.html("Name: " + d.name + "<br/>" +
+						"Studio: " + d.studio + "<br/>"+ 
+						"Rotten Tomato Score: " + d.rotten + "<br/>" +
+						"Domestic Revenue: " + d.y + "<br/>" + 
+						"Budget: " + d.x)
+						.style("left", (d3.event.pageX) + "px")
+						.style("top", (d3.event.pageY - 28) + "px");
+
+					})
+				.on("mouseout", function(){
+					div.transition()
+						.duration(500)
+						.style("opacity",0);
+				});
 			});	
 			model = leastSquares(comPoints2);
 			svgReg2.append("line")
@@ -557,7 +623,23 @@
 				.attr("cy", yScaleReg2(d.y)).attr("r", 4)
 				.attr("class","dra")
 				.attr("visibility","hidden")
-				.attr("fill","#9A2EFE");
+				.attr("fill","#9A2EFE")
+				.on("mouseover", function(){
+					div.transition().duration(200).style("opacity", .9);
+					div.html("Name: " + d.name + "<br/>" +
+						"Studio: " + d.studio + "<br/>"+ 
+						"Rotten Tomato Score: " + d.rotten + "<br/>" +
+						"Domestic Revenue: " + d.y + "<br/>" + 
+						"Budget: " + d.x)
+						.style("left", (d3.event.pageX) + "px")
+						.style("top", (d3.event.pageY - 28) + "px");
+
+					})
+				.on("mouseout", function(){
+					div.transition()
+						.duration(500)
+						.style("opacity",0);
+				});
 			});	
 			model = leastSquares(draPoints2);
 			svgReg2.append("line")
@@ -576,7 +658,23 @@
 				.attr("cy", yScaleReg2(d.y)).attr("r", 4)
 				.attr("class","mus")
 				.attr("visibility","hidden")
-				.attr("fill","#FA58F4");
+				.attr("fill","#FA58F4")
+				.on("mouseover", function(){
+					div.transition().duration(200).style("opacity", .9);
+					div.html("Name: " + d.name + "<br/>" +
+						"Studio: " + d.studio + "<br/>"+ 
+						"Rotten Tomato Score: " + d.rotten + "<br/>" +
+						"Domestic Revenue: " + d.y + "<br/>" + 
+						"Budget: " + d.x)
+						.style("left", (d3.event.pageX) + "px")
+						.style("top", (d3.event.pageY - 28) + "px");
+
+					})
+				.on("mouseout", function(){
+					div.transition()
+						.duration(500)
+						.style("opacity",0);
+				});
 			});	
 			model = leastSquares(musPoints2);
 			svgReg2.append("line")
@@ -595,7 +693,23 @@
 				.attr("cy", yScaleReg2(d.y)).attr("r", 4)
 				.attr("class","doc")
 				.attr("visibility","hidden")
-				.attr("fill","#FE2E2E");
+				.attr("fill","#FE2E2E")
+				.on("mouseover", function(){
+					div.transition().duration(200).style("opacity", .9);
+					div.html("Name: " + d.name + "<br/>" +
+						"Studio: " + d.studio + "<br/>"+ 
+						"Rotten Tomato Score: " + d.rotten + "<br/>" +
+						"Domestic Revenue: " + d.y + "<br/>" + 
+						"Budget: " + d.x)
+						.style("left", (d3.event.pageX) + "px")
+						.style("top", (d3.event.pageY - 28) + "px");
+
+					})
+				.on("mouseout", function(){
+					div.transition()
+						.duration(500)
+						.style("opacity",0);
+				});
 			});	
 			model = leastSquares(docPoints2);
 			svgReg2.append("line")
@@ -614,7 +728,23 @@
 				.attr("cy", yScaleReg2(d.y)).attr("r", 4)
 				.attr("class","tsh")
 				.attr("visibility","hidden")
-				.attr("fill","#F4FA58");
+				.attr("fill","#F4FA58")
+				.on("mouseover", function(){
+					div.transition().duration(200).style("opacity", .9);
+					div.html("Name: " + d.name + "<br/>" +
+						"Studio: " + d.studio + "<br/>"+ 
+						"Rotten Tomato Score: " + d.rotten + "<br/>" +
+						"Domestic Revenue: " + d.y + "<br/>" + 
+						"Budget: " + d.x)
+						.style("left", (d3.event.pageX) + "px")
+						.style("top", (d3.event.pageY - 28) + "px");
+
+					})
+				.on("mouseout", function(){
+					div.transition()
+						.duration(500)
+						.style("opacity",0);
+				});
 			});	
 			model = leastSquares(tshPoints2);
 			svgReg2.append("line")
@@ -661,23 +791,6 @@
 				advBut2.style.backgroundColor = "#9AFE2E";
 				advBut2.style.color = "#1c1c1c";
 				advTog2 = "on";
-			}
-		}
-
-		function ClickAnimation2() {
-			//Hide existing data
-			if (animTog2 == "on") {
-				svgReg2.selectAll(".anim").attr("visibility","hidden");
-				animTog2 = "off";
-				animBut2.style.backgroundColor = "#1c1c1c";
-				animBut2.style.color = "white";
-			}
-			//Display data
-			else{
-				svgReg2.selectAll(".anim").attr("visibility","visible");
-				animBut2.style.backgroundColor = "red";
-				animBut2.style.color = "#1c1c1c";
-				animTog2 = "on";
 			}
 		}
 
@@ -792,8 +905,285 @@
 	
 				return model;
 			}
+	</script>
+
+	<script>
+
+			var barWidth = 1100;
+			var barHeight = 600;
+			var barPadding = 70;
+			var svgBar = d3.select("#barChart").append("svg")
+    			.attr("width", barWidth)
+    			.attr("height", barHeight);
+
+    		var xBarScale = d3.scale.ordinal().domain(["Action","Adventure","Comedy","Documentary","Drama","Musical","Thriller/Suspense/Horror"]).rangeBands([barPadding, barWidth-barPadding]);
+    		var colorBarScale = d3.scale.ordinal().range(['red','blue']);
+    		var yBarScale = d3.scale.linear().domain([0,50]).range([barHeight-barPadding, barPadding]);
 
 
+    		var xBarAxis = d3.svg.axis().scale(xBarScale).orient("bottom");
+    		var yBarAxis = d3.svg.axis().scale(yBarScale).orient("left");
+
+    		svgBar.append("g").attr("class", "axis")
+				.attr("transform", "translate(0," + yBarScale(0) + ")")
+				.call(xBarAxis).selectAll("text").attr("font-size", 12).attr("fill", "white");
+			svgBar.append("g").attr("class", "axis")
+				.attr("transform", "translate(" + xBarScale("Action") + ",0)")
+				.call(yBarAxis).selectAll("text").attr("font-size", 13).attr("fill", "white");
+			svgBar.append("text").text("Percentage Share").attr("x", 20).attr("y", 300).style("font-style", "arial").style("font-size", 20)
+				.attr("transform", "rotate(270 20 300)").style("fill","white")
+				.attr("text-anchor","middle")
+				.attr("dominant-baseline","central");
+			svgBar.append("rect").attr("x",900)
+				.attr("y", 40)
+				.attr("height",100)
+				.attr("width",150)
+				.attr("fill","#151515");
+			svgBar.append("rect").attr("x",910)
+				.attr("y",60)
+				.attr("height",15)
+				.attr("width", 3)
+				.attr("fill","#00CCFF");
+			svgBar.append("rect").attr("x",913)
+				.attr("y",60)
+				.attr("height",15)
+				.attr("width", 3)
+				.attr("fill","#9AFE2E");
+			svgBar.append("rect").attr("x",916)
+				.attr("y",60)
+				.attr("height",15)
+				.attr("width", 3)
+				.attr("fill","#FE2E2E");
+			svgBar.append("rect").attr("x",919)
+				.attr("y",60)
+				.attr("height",15)
+				.attr("width", 3)
+				.attr("fill","#9A2EFE");
+			svgBar.append("rect").attr("x",922)
+				.attr("y",60)
+				.attr("height",15)
+				.attr("width", 3)
+				.attr("fill","#FA58F4");
+			svgBar.append("rect").attr("x",925)
+				.attr("y",60)
+				.attr("height",15)
+				.attr("width", 3)
+				.attr("fill","#F4FA58");
+			svgBar.append("rect").attr("x",910)
+				.attr("y", 100)
+				.attr("height", 15)
+				.attr("width", 21)
+				.attr("fill","white");
+			svgBar.append("text").text("Market Share")
+				.attr("x",935)
+				.attr("y",70)
+				.attr("fill","white")
+				.attr("font-size",9);
+			svgBar.append("text").text("Average Budget Share")
+				.attr("x",935)
+				.attr("y",110)
+				.attr("fill","white")
+				.attr("font-size",9);
+
+
+
+			var actBar = [],
+				advBar = [],
+			 	comBar = [],
+				docBar = [],
+				draBar = [],
+				musBar = [],
+				tshBar = [];
+
+
+			d3.csv("barcsv.csv", function(error, rows) {
+				var barMap, color;
+				//Array to keep track of ID's of data for access later
+				barMap = d3.map(rows, function(id) {
+					//Make ID key to object in map
+					return Number(id.ID);
+				});
+
+				var coord;
+				for (var k = 0; k < barMap.size(); k++) {
+					var thisBarGenre = barMap.get(k+1).Genre;
+					if (thisBarGenre == "Action"){
+						barCoord = {'x': thisBarGenre, 
+						'yMkt': barMap.get(k+1).Share,
+						'yBudg': barMap.get(k+1).BudgetShare,
+						'avgBudg': barMap.get(k+1).AvgBudget};
+						actBar.push(barCoord);
+					}
+					if (thisBarGenre == "Adventure"){
+						barCoord = {'x': thisBarGenre, 
+						'yMkt': barMap.get(k+1).Share,
+						'yBudg': barMap.get(k+1).BudgetShare,
+						'avgBudg': barMap.get(k+1).AvgBudget};
+						advBar.push(barCoord);
+					}
+					if (thisBarGenre == "Comedy"){
+						barCoord = {'x': thisBarGenre, 
+						'yMkt': barMap.get(k+1).Share,
+						'yBudg': barMap.get(k+1).BudgetShare,
+						'avgBudg': barMap.get(k+1).AvgBudget};
+						comBar.push(barCoord);
+					}
+					if (thisBarGenre == "Documentary"){
+						barCoord = {'x': thisBarGenre, 
+						'yMkt': barMap.get(k+1).Share,
+						'yBudg': barMap.get(k+1).BudgetShare,
+						'avgBudg': barMap.get(k+1).AvgBudget};
+						docBar.push(barCoord);
+					}
+					if (thisBarGenre == "Drama"){
+						barCoord = {'x': thisBarGenre, 
+						'yMkt': barMap.get(k+1).Share,
+						'yBudg': barMap.get(k+1).BudgetShare,
+						'avgBudg': barMap.get(k+1).AvgBudget};
+						draBar.push(barCoord);
+					}
+					if (thisBarGenre == "Musical"){
+						barCoord = {'x': thisBarGenre, 
+						'yMkt': barMap.get(k+1).Share,
+						'yBudg': barMap.get(k+1).BudgetShare,
+						'avgBudg': barMap.get(k+1).AvgBudget};
+						musBar.push(barCoord);
+					}
+					if (thisBarGenre == "Thriller/Suspense/Horror"){
+						barCoord = {'x': thisBarGenre, 
+						'yMkt': barMap.get(k+1).Share,
+						'yBudg': barMap.get(k+1).BudgetShare,
+						'avgBudg': barMap.get(k+1).AvgBudget};
+						tshBar.push(barCoord);
+					}
+				}
+
+			plotBar(0);
+
+			});
+			
+			var barYear = 0;
+
+			function plotBar(year) {
+				svgBar.append("rect").attr("x", xBarScale(actBar[year].x)+40).attr("y", yBarScale(actBar[year].yMkt))
+					.attr("width",25).attr("fill","#00CCFF").attr("height", yBarScale(0)-yBarScale(actBar[year].yMkt))
+					.attr("class", "barRect");
+				svgBar.append("rect").attr("x", xBarScale(actBar[year].x)+71).attr("y", yBarScale(actBar[year].yBudg))
+					.attr("width",25).attr("fill", "white").attr("height",yBarScale(0)-yBarScale(actBar[year].yBudg))
+					.attr("class", "barRect");
+
+				svgBar.append("rect").attr("x", xBarScale(advBar[year].x)+40).attr("y", yBarScale(advBar[year].yMkt))
+					.attr("width",25).attr("fill","#9AFE2E").attr("height", yBarScale(0)-yBarScale(advBar[year].yMkt))
+					.attr("class", "barRect");
+				svgBar.append("rect").attr("x", xBarScale(advBar[year].x)+71).attr("y", yBarScale(advBar[year].yBudg))
+					.attr("width",25).attr("fill", "white").attr("height",yBarScale(0)-yBarScale(advBar[year].yBudg))
+					.attr("class", "barRect");
+
+				svgBar.append("rect").attr("x", xBarScale(comBar[year].x)+40).attr("y", yBarScale(comBar[year].yMkt))
+					.attr("width",25).attr("fill","#FE9A2E").attr("height", yBarScale(0)-yBarScale(comBar[year].yMkt))
+					.attr("class", "barRect");
+				svgBar.append("rect").attr("x", xBarScale(comBar[year].x)+71).attr("y", yBarScale(comBar[year].yBudg))
+					.attr("width",25).attr("fill", "white").attr("height",yBarScale(0)-yBarScale(comBar[year].yBudg))
+					.attr("class", "barRect");
+
+				svgBar.append("rect").attr("x", xBarScale(docBar[year].x)+40).attr("y", yBarScale(docBar[year].yMkt))
+					.attr("width",25).attr("fill","#FE2E2E").attr("height", yBarScale(0)-yBarScale(docBar[year].yMkt))
+					.attr("class", "barRect");
+				svgBar.append("rect").attr("x", xBarScale(docBar[year].x)+71).attr("y", yBarScale(docBar[year].yBudg))
+					.attr("width",25).attr("fill", "white").attr("height",yBarScale(0)-yBarScale(docBar[year].yBudg))
+					.attr("class", "barRect");
+
+				svgBar.append("rect").attr("x", xBarScale(draBar[year].x)+40).attr("y", yBarScale(draBar[year].yMkt))
+					.attr("width",25).attr("fill","#9A2EFE").attr("height", yBarScale(0)-yBarScale(draBar[year].yMkt))
+					.attr("class", "barRect");
+				svgBar.append("rect").attr("x", xBarScale(draBar[year].x)+71).attr("y", yBarScale(draBar[year].yBudg))
+					.attr("width",25).attr("fill", "white").attr("height",yBarScale(0)-yBarScale(draBar[year].yBudg))
+					.attr("class", "barRect");
+
+				svgBar.append("rect").attr("x", xBarScale(musBar[year].x)+40).attr("y", yBarScale(musBar[year].yMkt))
+					.attr("width",25).attr("fill","#FA58F4").attr("height", yBarScale(0)-yBarScale(musBar[year].yMkt))
+					.attr("class", "barRect");
+				svgBar.append("rect").attr("x", xBarScale(musBar[year].x)+71).attr("y", yBarScale(musBar[year].yBudg))
+					.attr("width",25).attr("fill", "white").attr("height",yBarScale(0)-yBarScale(musBar[year].yBudg))
+					.attr("class", "barRect");
+
+				svgBar.append("rect").attr("x", xBarScale(tshBar[year].x)+40).attr("y", yBarScale(tshBar[year].yMkt))
+					.attr("width",25).attr("fill","#F4FA58").attr("height", yBarScale(0)-yBarScale(tshBar[year].yMkt))
+					.attr("class", "barRect");
+				svgBar.append("rect").attr("x", xBarScale(tshBar[year].x)+71).attr("y", yBarScale(tshBar[year].yBudg))
+					.attr("width",25).attr("fill", "white").attr("height",yBarScale(0)-yBarScale(tshBar[year].yBudg))
+					.attr("class", "barRect");
+			}
+
+			function leftBar() {
+				if (barYear == 0) { return;}
+				else {
+					document.getElementById("rightBarButton").disabled = false;
+					svgBar.selectAll("rect.barRect").remove();
+					barYear -= 1;
+					if (barYear == 0) { 
+						document.getElementById("barYearDiv").innerText = "Budget 2007, Market-Share 2006";
+					}
+					if (barYear == 1) { 
+						document.getElementById("barYearDiv").innerText = "Budget 2008, Market-Share 2007";
+					}
+					if (barYear == 2) { 
+						document.getElementById("barYearDiv").innerText = "Budget 2009, Market-Share 2008";
+					}
+					if (barYear == 3) { 
+						document.getElementById("barYearDiv").innerText = "Budget 2010, Market-Share 2009";
+					}
+					if (barYear == 4) { 
+						document.getElementById("barYearDiv").innerText = "Budget 2011, Market-Share 2010";
+					}
+					if (barYear == 5) { 
+						document.getElementById("barYearDiv").innerText = "Budget 2012, Market-Share 2011";
+					}
+					if (barYear == 6) {
+						document.getElementById("barYearDiv").innerText = "Budget 2013, Market-Share 2012";
+					}
+					plotBar(barYear);
+					if (barYear == 0) { 
+						document.getElementById("leftBarButton").setAttribute("disabled","disabled");
+					} 
+				}
+
+			}
+
+			function rightBar() {
+				if (barYear == 6) { return;}
+				else {
+					document.getElementById("leftBarButton").disabled = false;
+					svgBar.selectAll("rect.barRect").remove();
+					barYear += 1;
+					if (barYear == 0) {
+					 document.getElementById("barYearDiv").innerText = "Budget 2007, Market-Share 2006";
+					}
+					if (barYear == 1) { 
+						document.getElementById("barYearDiv").innerText = "Budget 2008, Market-Share 2007";
+					}
+					if (barYear == 2) { 
+						document.getElementById("barYearDiv").innerText = "Budget 2009, Market-Share 2008";
+					}
+					if (barYear == 3) { 
+						document.getElementById("barYearDiv").innerText = "Budget 2010, Market-Share 2009";
+					}
+					if (barYear == 4) { 
+						document.getElementById("barYearDiv").innerText = "Budget 2011, Market-Share 2010";
+					}
+					if (barYear == 5) { 
+						document.getElementById("barYearDiv").innerText = "Budget 2012, Market-Share 2011";
+					}
+					if (barYear == 6) { 
+						document.getElementById("barYearDiv").innerText = "Budget 2013, Market-Share 2012";
+					}
+					plotBar(barYear);
+					if (barYear==6) { 
+						document.getElementById("rightBarButton").setAttribute("disabled","disabled");
+					}
+				}
+
+			}
 	</script>	
 
 
