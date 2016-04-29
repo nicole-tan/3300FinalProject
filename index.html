@@ -772,23 +772,6 @@
 			}
 		}
 
-		function ClickAnimation2() {
-			//Hide existing data
-			if (animTog2 == "on") {
-				svgReg2.selectAll(".anim").attr("visibility","hidden");
-				animTog2 = "off";
-				animBut2.style.backgroundColor = "#1c1c1c";
-				animBut2.style.color = "white";
-			}
-			//Display data
-			else{
-				svgReg2.selectAll(".anim").attr("visibility","visible");
-				animBut2.style.backgroundColor = "red";
-				animBut2.style.color = "#1c1c1c";
-				animTog2 = "on";
-			}
-		}
-
 		function ClickComedy2() {
 			//Hide existing data
 			if (comTog2 == "on") {
@@ -925,6 +908,62 @@
 			svgBar.append("g").attr("class", "axis")
 				.attr("transform", "translate(" + xBarScale("Action") + ",0)")
 				.call(yBarAxis).selectAll("text").attr("font-size", 13).attr("fill", "white");
+			svgBar.append("text").text("Percentage Share").attr("x", 20).attr("y", 300).style("font-style", "arial").style("font-size", 20)
+				.attr("transform", "rotate(270 20 300)").style("fill","white")
+				.attr("text-anchor","middle")
+				.attr("dominant-baseline","central");
+			svgBar.append("rect").attr("x",900)
+				.attr("y", 40)
+				.attr("height",100)
+				.attr("width",150)
+				.attr("fill","#151515");
+			svgBar.append("rect").attr("x",910)
+				.attr("y",60)
+				.attr("height",15)
+				.attr("width", 3)
+				.attr("fill","#00CCFF");
+			svgBar.append("rect").attr("x",913)
+				.attr("y",60)
+				.attr("height",15)
+				.attr("width", 3)
+				.attr("fill","#9AFE2E");
+			svgBar.append("rect").attr("x",916)
+				.attr("y",60)
+				.attr("height",15)
+				.attr("width", 3)
+				.attr("fill","#FE2E2E");
+			svgBar.append("rect").attr("x",919)
+				.attr("y",60)
+				.attr("height",15)
+				.attr("width", 3)
+				.attr("fill","#9A2EFE");
+			svgBar.append("rect").attr("x",922)
+				.attr("y",60)
+				.attr("height",15)
+				.attr("width", 3)
+				.attr("fill","#FA58F4");
+			svgBar.append("rect").attr("x",925)
+				.attr("y",60)
+				.attr("height",15)
+				.attr("width", 3)
+				.attr("fill","#F4FA58");
+			svgBar.append("rect").attr("x",910)
+				.attr("y", 100)
+				.attr("height", 15)
+				.attr("width", 21)
+				.attr("fill","white");
+			svgBar.append("text").text("Market Share")
+				.attr("x",935)
+				.attr("y",70)
+				.attr("fill","white")
+				.attr("font-size",9);
+			svgBar.append("text").text("Average Budget Share")
+				.attr("x",935)
+				.attr("y",110)
+				.attr("fill","white")
+				.attr("font-size",9);
+
+
 
 			var actBar = [],
 				advBar = [],
