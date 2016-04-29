@@ -30,11 +30,11 @@ svg {
 	stroke: white;
 }
 #part1 {
-	margin-bottom: 10px;
+	margin-bottom: 50px;
 	width:1300px;
 }
 #part2 {
-	margin-top: 750px;
+	margin-top: 50px;
 	width:1300px;
 }
 #genreMarket {
@@ -110,44 +110,44 @@ svg {
 .actionLine {
   stroke-dasharray: 1250;
   stroke-dashoffset: 1200;
-  animation: dash 1s linear forwards;
+  animation: dash 0.5s linear forwards;
 }
 
 /**doesn't work*/
 .adventureLine {
    stroke-dasharray: 1550;
   stroke-dashoffset: 1300;
-  animation: dash 1s linear forwards;
+  animation: dash 0.5s linear forwards;
 }
 
 .comedyLine {
 	  stroke-dasharray: 1250;
   stroke-dashoffset: 1200;
-  animation: dash 1s linear forwards;
+  animation: dash 0.5s linear forwards;
 }
 
 .documentaryLine {
 	  stroke-dasharray: 1250;
   stroke-dashoffset: 1200;
-  animation: dash 1s linear forwards;
+  animation: dash 0.5s linear forwards;
 }
 
 .dramaLine {
 	  stroke-dasharray: 1250;
   stroke-dashoffset: 1200;
-  animation: dash 1s linear forwards;
+  animation: dash 0.5s linear forwards;
 }
 
 .musicalLine {
 	  stroke-dasharray: 1250;
   stroke-dashoffset: 1200;
-  animation: dash 1s linear forwards;
+  animation: dash 0.5s linear forwards;
 }
 
 .tshLine {
 	  stroke-dasharray: 1250;
   stroke-dashoffset: 1200;
-  animation: dash 1s linear forwards;
+  animation: dash 0.5s linear forwards;
 }
 
 
@@ -214,4 +214,26 @@ div.tooltip {
 	color: white;
 }
 
+.description_font {
+	font-family: arial;
+	color: white;
+	text-align: center;
+}
 
+.div_descriptions {
+	margin-top: 50px;
+	width: 65%;
+	margin-left: 17%;
+}
+
+
+#div_description_2 {
+	width: 65%;
+	margin-left: 15%;
+}
+
+
+#div_description_3 {
+	width: 65%;
+	margin-left: 15%;
+}
